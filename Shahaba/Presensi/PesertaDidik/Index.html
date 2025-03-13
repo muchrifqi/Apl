@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aplikasi Presensi Peserta Didik</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Aplikasi Presensi Siswa</h1>
+      <div id="scanner">
+        <p>Arahkan kamera ke QR code di kartu siswa.</p>
+        <div id="qr-reader" style="width: 100%;"></div>
+      </div>
+      <div id="result"></div>
+      <button id="start-button" style="display: none;" onclick="startScan()" class="button">
+        Mulai Pemindaian Ulang
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p style="color: white;">&copy; 2025 Shahaba SD & Prasekolah</p>
+    </footer>
+  </body>
+</html>
