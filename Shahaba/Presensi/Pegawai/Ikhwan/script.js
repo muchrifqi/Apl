@@ -38,9 +38,9 @@ function checkLocation() {
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
 
-          // Cek apakah pengguna berada dalam radius 30 meter dari salah satu lokasi yang diizinkan
+          // Cek apakah pengguna berada dalam radius 50 kilometer dari salah satu lokasi yang diizinkan
           const isWithinRadius = allowedLocations.some(
-            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 30
+            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 50000
           );
 
           if (isWithinRadius) {
@@ -136,7 +136,7 @@ async function presensi(nama) {
     // Tampilkan pesan sukses dengan SweetAlert2
     await Swal.fire({
       icon: 'success',
-      title: 'Syukran!',
+      title: 'Presensi Berhasil',
       text: `Presensi ${nama} telah dicatat.`,
     });
 
