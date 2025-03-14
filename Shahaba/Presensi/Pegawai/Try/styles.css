@@ -1,11 +1,11 @@
 :root {
-    --primary-color: #00245a; /* Warna biru tua */
-    --secondary-color: #000f23; /* Warna biru lebih gelap */
-    --accent-color: #0048ff; /* Warna biru cerah */
-    --background-gradient: linear-gradient(-45deg, #0048ff, #000f34); /* Gradien biru */
+    --primary-color: #172e69; /* Warna biru shahaba sd */
+    --secondary-color: #2b2b2b; 
+    --accent-color: #ee9d15; /* Warna biru cerah */
+    --background-gradient: linear-gradient(-45deg, #2d58c4, #172e69); /* Gradien biru */
     --text-color: white; /* Warna teks putih */
-    --error-color: #f44336; /* Warna merah untuk pesan error */
-    --success-color: #4caf50; /* Warna hijau untuk pesan sukses */
+    --error-color: #870900; /* Warna merah untuk pesan error */
+    --success-color: #006c04; /* Warna hijau untuk pesan sukses */
     --button-hover-color: rgba(6, 158, 54, 0.758); /* Warna hijau saat hover */
 }
 
@@ -117,7 +117,7 @@ button:disabled {
 }
 
 .footer {
-    position: fixed;
+    position:fixed;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -138,8 +138,8 @@ button:disabled {
 
 #statusMessage {
     color: var(--error-color);
-    background: rgba(255, 255, 255, 0.1);
-    padding: 3px;
+    background: rgb(255, 255, 255);
+    padding: 7px;
     border-radius: 10px;
     font-size: 1rem;
     margin-top: 1rem;
@@ -186,17 +186,17 @@ a {
 }
 
 a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 251, 0, 0.251);
     transform: translateY(-5px);
 }
 
 /* Gaya untuk section pengumuman */
 .announcement-section {
     width: 100%;
-    max-width: 800px;
+    max-width: 400px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    padding: 1.5rem;
+    padding: 0.5rem;
     border-radius: 15px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
@@ -219,7 +219,7 @@ a:hover {
 }
 
 .admin-button {
-    background-color: rgba(231, 76, 60, 0.8);
+    background-color: #ee9d15;
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -231,7 +231,7 @@ a:hover {
 }
 
 .admin-button:hover {
-    background-color: rgba(192, 57, 43, 0.9);
+    background-color: #e15f0e;
     transform: translateY(-2px);
 }
 
@@ -239,7 +239,7 @@ a:hover {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #db6200;
+    background-color: #e15f0e;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -264,3 +264,5 @@ a:hover {
   .floating-button i {
     font-size: 1rem;
   }
+
+  
