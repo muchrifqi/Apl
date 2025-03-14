@@ -193,7 +193,7 @@ a:hover {
 /* Gaya untuk section pengumuman */
 .announcement-section {
     width: 100%;
-    max-width: 400px;
+    max-width: 300px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     padding: 0.5rem;
