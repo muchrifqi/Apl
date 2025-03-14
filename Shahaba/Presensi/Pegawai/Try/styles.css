@@ -96,7 +96,7 @@ h1 {
 button {
     padding: 1rem;
     font-size: 1rem;
-    background: rgba(115, 115, 115, 0.468);
+    background: rgba(173, 173, 173, 0.468);
     border: 2px solid rgba(255, 255, 255, 0.2);
     color: white;
     border-radius: 15px;
@@ -140,6 +140,7 @@ button:disabled {
     color: var(--error-color);
     background: rgb(255, 255, 255);
     padding: 7px;
+    max-width: 800px;
     border-radius: 10px;
     font-size: 1rem;
     margin-top: 1rem;
@@ -192,15 +193,15 @@ a:hover {
 
 /* Gaya untuk section pengumuman */
 .announcement-section {
-    width: 100%;
-    max-width: 350px;
+    width: auto;
+    max-width: 500px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     padding: 1rem;
     border-radius: 25px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    margin-top: 120px;
+    margin-top: 110px;
     text-align: center;
     animation: fadeIn 1s ease-in-out;
     color: var(--text-color);
@@ -242,10 +243,10 @@ a:hover {
     background-color: #e15f0e;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.8rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
     display: flex;
@@ -262,7 +263,7 @@ a:hover {
   }
   
   .floating-button i {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
 
   
