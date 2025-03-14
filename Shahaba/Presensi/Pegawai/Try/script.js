@@ -39,9 +39,9 @@ function checkLocation() {
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
 
-          // Cek apakah pengguna berada dalam radius 20 meter dari salah satu lokasi yang diizinkan
+          // Cek apakah pengguna berada dalam radius 20000 meter dari salah satu lokasi yang diizinkan
           const isWithinRadius = allowedLocations.some(
-            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 20
+            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 20000
           );
 
           if (isWithinRadius) {
