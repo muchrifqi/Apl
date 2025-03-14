@@ -4,6 +4,7 @@ const statusMessage = document.getElementById('statusMessage');
 const confirmation = document.getElementById('confirmation');
 const confirmationMessage = document.getElementById('confirmationMessage');
 const loading = document.getElementById('loading');
+const announcementText = document.getElementById('announcementText');
 
 // Lokasi yang diizinkan
 const allowedLocations = [
@@ -78,7 +79,7 @@ async function getIPAddress() {
 async function getButtonStatus() {
   try {
     const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbxiONB6ZxClTKwoD-GMJU2vp-rgdDFfEaFfAG3zyAqWchh_XWrsYDlqiX_2P12zNn0D2g/exec?action=getStatus`
+      `https://script.google.com/macros/s/AKfycbx905NCryDB-xr0gn9KTNVmyeO7X2dt6foZd30bqC-cwkyO8CARPTVHiJFEg9lVheBf/exec?action=getStatus`
     );
     const data = await response.json();
     return data;
@@ -91,11 +92,8 @@ async function getButtonStatus() {
 // Fungsi untuk menonaktifkan tombol berdasarkan status
 async function updateButtonStatus() {
   const status = await getButtonStatus();
-  const buttons = document.querySelectorAll('button');
-
   buttons.forEach(button => {
     const nama = button.innerText;
-    const waktu = new Date().toLocaleTimeString();
     if (status[nama] === "Nonaktif") {
       button.disabled = true;
       button.innerText = `${nama} ✓`;
@@ -129,7 +127,7 @@ async function presensi(nama) {
     // Kirim data ke Google Apps Script
     const ip = await getIPAddress();
     const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbxiONB6ZxClTKwoD-GMJU2vp-rgdDFfEaFfAG3zyAqWchh_XWrsYDlqiX_2P12zNn0D2g/exec?action=presensi&nama=${encodeURIComponent(nama)}&ip=${encodeURIComponent(ip)}`
+      `https://script.google.com/macros/s/AKfycbx905NCryDB-xr0gn9KTNVmyeO7X2dt6foZd30bqC-cwkyO8CARPTVHiJFEg9lVheBf/exec?action=presensi&nama=${encodeURIComponent(nama)}&ip=${encodeURIComponent(ip)}`
     );
     const result = await response.text();
 
@@ -155,37 +153,6 @@ async function presensi(nama) {
     loading.style.display = 'none'; // Sembunyikan loading indicator
   }
 }
-
-    // Password admin
-const ADMIN_PASSWORD = "151951";
-
-// Fungsi untuk menampilkan atau menyembunyikan pengumuman
-function updateAnnouncement(announcement) {
-    const announcementText = document.getElementById('announcementText');
-    if (announcement && announcement.trim() !== "") {
-        announcementText.textContent = announcement;
-    } else {
-        announcementText.textContent = "Tidak ada pengumuman saat ini.";
-    }
-}
-
-// Fungsi untuk memverifikasi password admin
-function verifyAdmin() {
-    const password = prompt("Masukkan password admin:");
-    if (password === ADMIN_PASSWORD) {
-        const newAnnouncement = prompt("Masukkan pengumuman baru:");
-        updateAnnouncement(newAnnouncement);
-        alert("Pengumuman berhasil diperbarui!");
-    } else {
-        alert("Password salah! Anda tidak memiliki akses.");
-    }
-}
-
-// Event listener untuk tombol admin
-document.getElementById('adminAnnouncementButton').addEventListener('click', verifyAdmin);
-
-// Inisialisasi pengumuman saat halaman dimuat
-updateAnnouncement("");
 
 // Fungsi untuk menghapus cache dan mendapatkan lokasi terbaru
 function clearCacheAndGetLocation() {
@@ -229,9 +196,106 @@ document.getElementById('floatingButton').addEventListener('click', async () => 
   }
 });
 
+// Feedback icon berubah sementara setelah diklik
+document.getElementById('floatingButton').addEventListener('click', async () => {
+  const button = document.getElementById('floatingButton');
+  button.innerHTML = '<i class="fas fa-check"></i> Berhasil'; // Ganti icon
+  button.disabled = true; // Nonaktifkan tombol sementara
+
+  try {
+    const { userLat, userLng } = await clearCacheAndGetLocation();
+    statusMessage.innerText = `Lokasi terbaru: ${userLat}, ${userLng}`;
+    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color');
+  } catch (error) {
+    statusMessage.innerText = error;
+    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
+  } finally {
+    setTimeout(() => {
+      button.innerHTML = '<i class="fas fa-sync-alt"></i> Lokasi Presisi'; // Kembalikan icon
+      button.disabled = false; // Aktifkan kembali tombol
+    }, 2000); // Kembalikan setelah 2 detik
+  }
+});
+
+
+// Fungsi-fungsi Pengumuman
+const scriptUrl = 'https://script.google.com/macros/s/AKfycbx4zfI-4mYrQ5Wx5u6qYoJ4Z0bt2848P4pDh_MeufnwxPNi-1TBZNJjR7b02d3c9piK/exec';
+const ADMIN_PASSWORD = "151951"; // Ganti dengan password admin Anda
+
+// Fungsi untuk mengambil pengumuman
+async function getAnnouncement() {
+  try {
+    const response = await fetch(`${scriptUrl}?action=getAnnouncement`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Cek header Content-Type untuk menentukan cara mem-parsing respons
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json(); // Parsing sebagai JSON
+      updateAnnouncement(data.pengumuman); // Update teks pengumuman
+    } else {
+      const text = await response.text(); // Parsing sebagai teks biasa
+      updateAnnouncement(text); // Update teks pengumuman
+    }
+  } catch (error) {
+    console.error("Gagal mengambil pengumuman:", error);
+    updateAnnouncement("Gagal memuat pengumuman.");
+  }
+}
+
+// Fungsi untuk menyimpan pengumuman
+async function setAnnouncement(announcement) {
+  try {
+    const response = await fetch(
+      `${scriptUrl}?action=setAnnouncement&announcement=${encodeURIComponent(announcement)}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const result = await response.text();
+    console.log(result); // "Pengumuman berhasil disimpan."
+  } catch (error) {
+    console.error("Gagal menyimpan pengumuman:", error);
+  }
+}
+
+// Fungsi untuk memperbarui teks pengumuman di UI
+function updateAnnouncement(announcement) {
+  const announcementText = document.getElementById('announcementText');
+  if (announcement && announcement.trim() !== "") {
+    announcementText.textContent = announcement;
+  } else {
+    announcementText.textContent = "Tidak ada pengumuman saat ini.";
+  }
+}
+
+// Perbarui pengumuman setiap 5 detik
+setInterval(getAnnouncement, 5000);
+
+// Event listener untuk tombol admin
+document.getElementById('adminAnnouncementButton').addEventListener('click', () => {
+  const password = prompt("Masukkan password admin:");
+  if (password === ADMIN_PASSWORD) {
+    const newAnnouncement = prompt("Masukkan pengumuman baru:");
+    if (newAnnouncement) {
+      setAnnouncement(newAnnouncement);
+      alert("Pengumuman berhasil diperbarui!");
+    }
+  } else {
+    alert("Password salah!");
+  }
+});
+
+// Ambil pengumuman saat halaman dimuat
+window.onload = () => {
+  getAnnouncement(); // Ambil pengumuman pertama kali
+};
+
 // Periksa status tombol saat halaman dimuat
 window.onload = async () => {
   await updateButtonStatus();
-  // Periksa status tombol setiap 5 detik
-  setInterval(updateButtonStatus, 5000);
+  getAnnouncement(); // Ambil pengumuman saat halaman dimuat
+  setInterval(updateButtonStatus, 3000); // Periksa status tombol setiap 5 detik
 };
