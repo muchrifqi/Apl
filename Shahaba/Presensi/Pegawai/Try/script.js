@@ -38,9 +38,9 @@ function checkLocation() {
           const userLat = position.coords.latitude;
           const userLng = position.coords.longitude;
 
-          // Cek apakah pengguna berada dalam radius 20000 meter dari salah satu lokasi yang diizinkan
+          // Cek apakah pengguna berada dalam radius 20 meter dari salah satu lokasi yang diizinkan
           const isWithinRadius = allowedLocations.some(
-            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 20000
+            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 20
           );
 
           if (isWithinRadius) {
@@ -157,7 +157,7 @@ async function presensi(nama) {
 }
 
     // Password admin
-const ADMIN_PASSWORD = "121321";
+const ADMIN_PASSWORD = "151951";
 
 // Fungsi untuk menampilkan atau menyembunyikan pengumuman
 function updateAnnouncement(announcement) {
@@ -187,6 +187,47 @@ document.getElementById('adminAnnouncementButton').addEventListener('click', ver
 // Inisialisasi pengumuman saat halaman dimuat
 updateAnnouncement("");
 
+// Fungsi untuk menghapus cache dan mendapatkan lokasi terbaru
+function clearCacheAndGetLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject("Geolocation tidak didukung di browser ini.");
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+          const accuracy = position.coords.accuracy; // Akurasi dalam meter
+          console.log(`Lokasi terbaru: ${userLat}, ${userLng}, Akurasi: ${accuracy} meter`);
+          resolve({ userLat, userLng });
+        },
+        (error) => {
+          reject("Gagal mendapatkan lokasi: " + error.message);
+        },
+        {
+          enableHighAccuracy: true, // Aktifkan akurasi tinggi
+          timeout: 5000, // Batas waktu permintaan (5 detik)
+          maximumAge: 0 // Tidak menggunakan cache lama
+        }
+      );
+    }
+  });
+}
+
+// Event listener untuk tombol melayang
+document.getElementById('floatingButton').addEventListener('click', async () => {
+  try {
+    loading.style.display = 'block'; // Tampilkan loading indicator
+    const { userLat, userLng } = await clearCacheAndGetLocation();
+    statusMessage.innerText = `Lokasi terbaru: ${userLat}, ${userLng}`;
+    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color');
+  } catch (error) {
+    statusMessage.innerText = error;
+    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
+  } finally {
+    loading.style.display = 'none'; // Sembunyikan loading indicator
+  }
+});
 
 // Periksa status tombol saat halaman dimuat
 window.onload = async () => {
