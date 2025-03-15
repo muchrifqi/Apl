@@ -1,301 +1,269 @@
-// Langsung kirim IP ke Apps Script tanpa menampilkan ke user
-const buttons = document.querySelectorAll('button');
-const statusMessage = document.getElementById('statusMessage');
-const confirmation = document.getElementById('confirmation');
-const confirmationMessage = document.getElementById('confirmationMessage');
-const loading = document.getElementById('loading');
-const announcementText = document.getElementById('announcementText');
-
-// Lokasi yang diizinkan
-const allowedLocations = [
-  { lat: -6.589108056587621, lng: 106.8218295143879 }, // Lokasi 1 (Shahaba Ruko Tanah Baru Residence)
-  { lat: -6.592279, lng: 106.822581 } // Lokasi 2 (Shahaba Jl. Swadaya)
-];
-
-// Fungsi untuk menghitung jarak antara dua koordinat (dalam meter)
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371e3; // Radius bumi dalam meter
-  const φ1 = (lat1 * Math.PI) / 180;
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  return R * c;
+:root {
+    --primary-color: #172e69; /* Warna biru shahaba sd */
+    --secondary-color: #2b2b2b; 
+    --accent-color: #ee9d15; /* Warna biru cerah */
+    --background-gradient: linear-gradient(-45deg, #2d58c4, #172e69); /* Gradien biru */
+    --text-color: white; /* Warna teks putih */
+    --error-color: #870900; /* Warna merah untuk pesan error */
+    --success-color: #006c04; /* Warna hijau untuk pesan sukses */
+    --button-hover-color: rgba(6, 158, 54, 0.758); /* Warna hijau saat hover */
 }
 
-// Fungsi untuk memeriksa lokasi pengguna
-function checkLocation() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject("Geolocation tidak didukung di browser ini.");
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          // Cek apakah pengguna berada dalam radius 20 meter dari salah satu lokasi yang diizinkan
-          const isWithinRadius = allowedLocations.some(
-            (loc) => calculateDistance(userLat, userLng, loc.lat, loc.lng) <= 20
-          );
-
-          if (isWithinRadius) {
-            resolve();
-          } else {
-            reject("Anda berada di luar lokasi yang diizinkan.");
-          }
-        },
-        (error) => {
-          // Pesan error jika pengguna tidak mengizinkan akses lokasi
-          if (error.code === error.PERMISSION_DENIED) {
-            reject("Anda tidak mengizinkan akses lokasi. Harap aktifkan izin lokasi.");
-          } else {
-            reject("Gagal mendapatkan lokasi: " + error.message);
-          }
-        }
-      );
-    }
-  });
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-gradient);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
 }
 
-// Fungsi untuk mendapatkan alamat IP
-async function getIPAddress() {
-  try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
-    return data.ip;
-  } catch (error) {
-    console.error("Gagal mendapatkan alamat IP:", error);
-    return null;
-  }
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-// Fungsi untuk memeriksa status tombol dari spreadsheet
-async function getButtonStatus() {
-  try {
-    const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbx905NCryDB-xr0gn9KTNVmyeO7X2dt6foZd30bqC-cwkyO8CARPTVHiJFEg9lVheBf/exec?action=getStatus`
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Gagal memeriksa status tombol:", error);
-    return {};
-  }
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    margin-top: 10px;
 }
 
-// Fungsi untuk menonaktifkan tombol berdasarkan status
-async function updateButtonStatus() {
-  const status = await getButtonStatus();
-  buttons.forEach(button => {
-    const nama = button.innerText;
-    if (status[nama] === "Nonaktif") {
-      button.disabled = true;
-      button.innerText = `${nama} ✓`;
-    }
-  });
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-// Fungsi presensi
-async function presensi(nama) {
-  const { isConfirmed } = await Swal.fire({
-    title: `Apakah Anda ${nama}?`,
-    text: "Pendataan presensi tidak dapat diwakilkan.",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: `Ya, Saya ${nama}`,
-    cancelButtonText: "Kembali",
-  });
-
-  if (!isConfirmed) {
-    return; // Batalkan jika pengguna memilih "Kembali"
-  }
-
-  const button = Array.from(buttons).find(btn => btn.innerText === nama);
-  button.disabled = true;
-  loading.style.display = 'block'; // Tampilkan loading indicator
-
-  try {
-    // Periksa lokasi pengguna
-    await checkLocation();
-
-    // Kirim data ke Google Apps Script
-    const ip = await getIPAddress();
-    const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbx905NCryDB-xr0gn9KTNVmyeO7X2dt6foZd30bqC-cwkyO8CARPTVHiJFEg9lVheBf/exec?action=presensi&nama=${encodeURIComponent(nama)}&ip=${encodeURIComponent(ip)}`
-    );
-    const result = await response.text();
-
-    // Tampilkan pesan sukses dengan SweetAlert2
-    await Swal.fire({
-      icon: 'success',
-      title: 'Presensi Berhasil',
-      text: `Presensi ${nama} telah dicatat.`,
-    });
-
-    // Update tampilan tombol
-    const waktu = new Date().toLocaleTimeString();
-    button.innerText = `${nama} ✓`;
-    confirmationMessage.innerText = `${nama} pukul ${waktu}`;
-    confirmation.style.display = 'block';
-    statusMessage.innerText = "";
-  } catch (error) {
-    // Tampilkan pesan error
-    statusMessage.innerText = error;
-    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
-    button.disabled = false;
-  } finally {
-    loading.style.display = 'none'; // Sembunyikan loading indicator
-  }
+.curve {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: white;
+    border-radius: 0 0 50% 50%;
+    transform: scaleX(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-// Fungsi untuk menghapus cache dan mendapatkan lokasi terbaru
-function clearCacheAndGetLocation() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject("Geolocation tidak didukung di browser ini.");
-    } else {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-          const accuracy = position.coords.accuracy; // Akurasi dalam meter
-          console.log(`Lokasi terbaru: ${userLat}, ${userLng}, Akurasi: ${accuracy} meter`);
-          resolve({ userLat, userLng });
-        },
-        (error) => {
-          reject("Gagal mendapatkan lokasi: " + error.message);
-        },
-        {
-          enableHighAccuracy: true, // Aktifkan akurasi tinggi
-          timeout: 5000, // Batas waktu permintaan (5 detik)
-          maximumAge: 0 // Tidak menggunakan cache lama
-        }
-      );
-    }
-  });
+.curve h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
 }
 
-// Event listener untuk tombol melayang
-document.getElementById('floatingButton').addEventListener('click', async () => {
-  try {
-    loading.style.display = 'block'; // Tampilkan loading indicator
-    const { userLat, userLng } = await clearCacheAndGetLocation();
-    statusMessage.innerText = `Lokasi terbaru: ${userLat}, ${userLng}`;
-    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color');
-  } catch (error) {
-    statusMessage.innerText = error;
-    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
-  } finally {
-    loading.style.display = 'none'; // Sembunyikan loading indicator
-  }
-});
+.curve h2 {
+    color: var(--secondary-color);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: normal;
+}
 
-// Feedback icon berubah sementara setelah diklik
-document.getElementById('floatingButton').addEventListener('click', async () => {
-  const button = document.getElementById('floatingButton');
-  button.innerHTML = '<i class="fas fa-check"></i> Berhasil'; // Ganti icon
-  button.disabled = true; // Nonaktifkan tombol sementara
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
 
-  try {
-    const { userLat, userLng } = await clearCacheAndGetLocation();
-    statusMessage.innerText = `Lokasi terbaru: ${userLat}, ${userLng}`;
-    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--success-color');
-  } catch (error) {
-    statusMessage.innerText = error;
-    statusMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--error-color');
-  } finally {
-    setTimeout(() => {
-      button.innerHTML = '<i class="fas fa-sync-alt"></i> Lokasi Presisi'; // Kembalikan icon
-      button.disabled = false; // Aktifkan kembali tombol
-    }, 2000); // Kembalikan setelah 2 detik
-  }
-});
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
 
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
 
-// Fungsi-fungsi Pengumuman
-const scriptUrl = 'https://script.google.com/macros/s/AKfycbx4zfI-4mYrQ5Wx5u6qYoJ4Z0bt2848P4pDh_MeufnwxPNi-1TBZNJjR7b02d3c9piK/exec';
-const ADMIN_PASSWORD = "151951"; // Ganti dengan password admin Anda
+button {
+    padding: 1rem;
+    font-size: 1rem;
+    background: rgba(173, 173, 173, 0.468);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-// Fungsi untuk mengambil pengumuman
-async function getAnnouncement() {
-  try {
-    const response = await fetch(`${scriptUrl}?action=getAnnouncement`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+button:hover:not(:disabled) {
+    background: var(--button-hover-color);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-5px);
+}
+
+button:disabled {
+    background: rgba(0, 74, 11, 0.872);
+    border-color: rgba(255, 255, 255, 0.1);
+    cursor: not-allowed;
+}
+
+.footer {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.confirmation {
+    display: none;
+    margin-top: 1rem;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#statusMessage {
+    color: var(--error-color);
+    background: rgb(255, 255, 255);
+    padding: 7px;
+    max-width: 800px;
+    border-radius: 10px;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+#loading {
+    display: none;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+#loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
     }
 
-    // Cek header Content-Type untuk menentukan cara mem-parsing respons
-    const contentType = response.headers.get('content-type');
-    if (contentType && contentType.includes('application/json')) {
-      const data = await response.json(); // Parsing sebagai JSON
-      updateAnnouncement(data.pengumuman); // Update teks pengumuman
-    } else {
-      const text = await response.text(); // Parsing sebagai teks biasa
-      updateAnnouncement(text); // Update teks pengumuman
+    h1 {
+        font-size: 1.5rem;
     }
-  } catch (error) {
-    console.error("Gagal mengambil pengumuman:", error);
-    updateAnnouncement("Gagal memuat pengumuman.");
-  }
+
+    .button-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
 }
 
-// Fungsi untuk menyimpan pengumuman
-async function setAnnouncement(announcement) {
-  try {
-    const response = await fetch(
-      `${scriptUrl}?action=setAnnouncement&announcement=${encodeURIComponent(announcement)}`
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const result = await response.text();
-    console.log(result); // "Pengumuman berhasil disimpan."
-  } catch (error) {
-    console.error("Gagal menyimpan pengumuman:", error);
-  }
+a {
+    text-decoration: none;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border-radius: 15px;
+    cursor: pointer;
+    display: inline-block;
+    transition: all 0.3s ease;
 }
 
-// Fungsi untuk memperbarui teks pengumuman di UI
-function updateAnnouncement(announcement) {
-  const announcementText = document.getElementById('announcementText');
-  if (announcement && announcement.trim() !== "") {
-    announcementText.textContent = announcement;
-  } else {
-    announcementText.textContent = "Tidak ada pengumuman saat ini.";
-  }
+a:hover {
+    background-color: rgba(255, 251, 0, 0.251);
+    transform: translateY(-5px);
 }
 
-// Perbarui pengumuman setiap 5 detik
-setInterval(getAnnouncement, 5000);
+/* Gaya untuk section pengumuman */
+.announcement-section {
+    width: auto;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    margin-top: 110px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    color: var(--text-color);
+}
 
-// Event listener untuk tombol admin
-document.getElementById('adminAnnouncementButton').addEventListener('click', () => {
-  const password = prompt("Masukkan password admin:");
-  if (password === ADMIN_PASSWORD) {
-    const newAnnouncement = prompt("Masukkan pengumuman baru:");
-    if (newAnnouncement) {
-      setAnnouncement(newAnnouncement);
-      alert("Pengumuman berhasil diperbarui!");
-    }
-  } else {
-    alert("Password salah!");
+.announcement-section h3 {
+    color: var(--text-color);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+#announcementText {
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.admin-button {
+    background-color: #ee9d15;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.admin-button:hover {
+    background-color: #e15f0e;
+    transform: translateY(-2px);
+}
+
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #e15f0e;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    margin-bottom: 30px;
   }
-});
+  
+  .floating-button:hover {
+    background-color: #003bb3; /* Warna biru lebih gelap saat hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .floating-button i {
+    font-size: 0.8rem;
+  }
 
-// Ambil pengumuman saat halaman dimuat
-window.onload = () => {
-  getAnnouncement(); // Ambil pengumuman pertama kali
-};
-
-// Periksa status tombol saat halaman dimuat
-window.onload = async () => {
-  await updateButtonStatus();
-  getAnnouncement(); // Ambil pengumuman saat halaman dimuat
-  setInterval(updateButtonStatus, 3000); // Periksa status tombol setiap 5 detik
-};
+  
