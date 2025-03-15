@@ -45,8 +45,6 @@ Jika Anda ingin berkontribusi pada proyek ini, silakan buka issue atau pull requ
 
 © 2025 Shahaba SD & Prasekolah
 
-Copy
-
 ### Penjelasan:
 - **Fitur**: Menjelaskan fitur-fitur utama yang tersedia dalam sistem.
 - **Teknologi yang Digunakan**: Menjelaskan teknologi yang digunakan dalam pengembangan proyek.
