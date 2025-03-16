@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pegawai - Shahaba</title>
+    <link rel="icon" href="../assets/icons/priority.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/js/pegawai.js" defer></script>
+</head>
+<body>
+    <!-- Curve Header -->
+    <div class="curve">
+        <h1>Shahaba</h1>
+        <h2>Dashboard Pegawai</h2>
+    </div>
+
+    <!-- Container Utama -->
+    <div class="container">
+        <h3><i class="fas fa-user"></i> Selamat Datang, <span id="pegawaiName"></span></h3>
+        
+        <div class="button-container">
+            <button onclick="openAbsenForm()">Izin/Sakit</button>
+            <button onclick="openSlipGaji()">Lihat Slip Gaji</button>
+        </div>
+
+        <!-- Menu Admin (Tersembunyi secara default) -->
+        <div id="adminMenu" style="display: none;">
+            <button onclick="openDataPegawai()">Kelola Data Pegawai</button>
+            <button onclick="openPengaturanGaji()">Kelola Pengaturan Gaji</button>
+        </div>
+    </div>
+
+    <!-- Form Izin/Sakit (Dipindahkan ke luar container) -->
+    <div id="absenForm" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAbsenForm()">&times;</span>
+            <h3>Form Izin/Sakit</h3>
+            <form id="absenFormInput">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="Izin">Izin</option>
+                    <option value="Sakit">Sakit</option>
+                </select>
+                
+                <label for="keterangan">Keterangan:</label>
+                <textarea id="keterangan" name="keterangan" required></textarea>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Slip Gaji -->
+    <div id="slipGajiModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeSlipGaji()">&times;</span>
+            <h3>Slip Gaji</h3>
+            <form id="slipGajiForm">
+                <label for="bulan">Pilih Bulan:</label>
+                <input type="month" id="bulan" name="bulan" required>
+                
+                <button type="submit">Lihat Slip Gaji</button>
+            </form>
+            <div id="slipGajiContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 Shahaba SD & Prasekolah
+    </footer>
+</body>
+</html>

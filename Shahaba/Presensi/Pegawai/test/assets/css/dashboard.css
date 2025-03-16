@@ -1,0 +1,229 @@
+:root {
+    --primary-color: #172e69;
+    --secondary-color: #2b2b2b;
+    --accent-color: #e15f0e;
+    --background-gradient: linear-gradient(-45deg, #2d58c4, #172e69);
+    --text-color: white;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-gradient);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+.curve {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: white;
+    border-radius: 0 0 50% 50%;
+    transform: scaleX(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.curve h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.curve h2 {
+    color: var(--secondary-color);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: normal;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    max-height: 800px;
+    width: 90%;
+    height: auto;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    margin-top: 10px;
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+button {
+    padding: 0.7rem;
+    font-size: 1rem;
+    background: var(--accent-color);
+    border: none;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #e15f0e;
+    transform: translateY(-2px);
+}
+
+/* Gaya untuk modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%; /* Lebar modal 100% dari layar */
+    height: 100%; /* Tinggi modal 100% dari layar */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    margin: 10% auto;
+    padding: 1rem;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Lebar maksimum modal */
+    width: 90%; /* Lebar modal 90% dari layar */
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.close {
+    color: var(--text-color);
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--accent-color);
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+/* Gaya untuk modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Latar belakang semi-transparan */
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    margin: 10% auto; /* Pusatkan modal */
+    padding: 1rem;
+    border-radius: 25px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 500px; /* Lebar maksimum modal */
+    width: 90%; /* Lebar modal 90% dari layar */
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Gaya untuk form izin/sakit */
+#absenFormInput {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%; /* Lebar form 100% dari modal */
+}
+
+/* Gaya untuk textarea di form izin/sakit */
+#absenFormInput textarea {
+    width: 100%; /* Lebar textarea 100% dari parent */
+    max-width: 500px; /* Lebar maksimum textarea */
+    width: auto;
+    height: 120px; /* Tinggi textarea */
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    resize: vertical; /* Biarkan pengguna mengubah tinggi textarea */
+}
+
+/* Gaya untuk dropdown di form izin/sakit */
+#absenFormInput select {
+    width: 100%; /* Lebar dropdown 100% dari parent */
+    padding: 0.7rem;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: #172e69; /* Background dropdown lebih gelap */
+    color: white; /* Warna teks putih */
+    appearance: none; /* Hilangkan tampilan default browser */
+    -webkit-appearance: none; /* Untuk browser berbasis WebKit (Chrome, Safari) */
+    -moz-appearance: none; /* Untuk browser berbasis Mozilla (Firefox) */
+}
+
+/* Gaya untuk opsi di dalam dropdown */
+#absenFormInput select option {
+    background: rgba(0, 0, 0, 0.8); /* Background opsi lebih gelap */
+    color: white; /* Warna teks putih */
+}
+
+/* Gaya untuk ikon dropdown (opsional) */
+#absenFormInput select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Ikon dropdown */
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center; /* Posisi ikon */
+    background-size: 12px; /* Ukuran ikon */
+}
+
+/* Tombol close modal */
+.close {
+    color: var(--text-color);
+    float: right;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--accent-color);
+}
