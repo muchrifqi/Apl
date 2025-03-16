@@ -1,0 +1,122 @@
+Changelog
+Berikut adalah riwayat update dan pengembangan fitur pada Aplikasi Sistem Presensi Shahaba:
+
+[Versi 1.4.0] - 20 Maret 2025
+Penambahan Fitur
+Tombol Menu dengan Pilihan Tindakan:
+Menambahkan tombol menu yang menampilkan pilihan tindakan, termasuk:
+  ◦ Enable High Accuracy: Meningkatkan akurasi lokasi dan membersihkan cache untuk performa optimal.
+  ◦ Halaman About: Menyediakan informasi aplikasi dan panduan penggunaan.
+Pembaruan UI dan Kompatibilitas:
+Memperbarui antarmuka pengguna (UI) untuk tampilan yang lebih modern dan responsif.
+Meningkatkan kompatibilitas aplikasi dengan berbagai perangkat.
+Perbaikan Bug
+Memperbaiki bug kecil pada animasi tombol melayang.
+Memperbaiki tampilan responsif pada perangkat mobile.
+
+[Versi 1.3.1] - 15 Maret 2025
+Penambahan Fitur
+Tombol WhatsApp untuk Kontak Langsung:
+Menambahkan tombol WhatsApp yang mengarah ke nomor telepon Anda untuk memudahkan pengguna menghubungi Anda secara langsung.
+Tombol ini dapat ditemukan di menu tombol melayang (floating button).
+Perbaikan Tampilan Tombol dan CSS:
+Memperbaiki tampilan tombol agar lebih sesuai dengan desain aplikasi.
+Menyesuaikan CSS untuk meningkatkan konsistensi dan keindahan tampilan.
+Perbaikan Bug
+Memperbaiki bug kecil pada animasi tombol melayang.
+Memperbaiki tampilan responsif pada perangkat mobile.
+
+[Versi 1.3.0] - 14 Maret 2025
+Penambahan Fitur
+Tombol Melayang dengan Menu:
+Menambahkan tombol melayang (floating button) yang menampilkan menu saat diklik.
+Menu ini berisi opsi untuk:
+  ◦ Lokasi Presisi: Mengaktifkan akurasi tinggi GPS.
+  ◦ Tentang: Menuju halaman "Tentang" untuk informasi lebih lanjut tentang aplikasi.
+Halaman Tentang:
+Menambahkan halaman "Tentang" yang berisi informasi tentang aplikasi, tim pengembang, dan tujuan aplikasi.
+Halaman ini dapat diakses melalui menu tombol melayang.
+Perbaikan Bug
+Memperbaiki tampilan responsif pada perangkat mobile.
+Memperbaiki bug pada animasi loading yang terkadang tidak muncul.
+
+[Versi 1.2.0] - 14 Maret 2025
+Penambahan Fitur
+Tombol Melayang (Floating Button):
+Hapus Cache: Tombol untuk menghapus cache browser pengguna.
+Akurasi Tinggi GPS: Tombol untuk mengaktifkan akurasi tinggi pada GPS perangkat.
+Peningkatan Validasi Lokasi: Menambahkan fitur untuk meningkatkan akurasi validasi lokasi.
+Perbaikan Bug
+Memperbaiki validasi lokasi yang terkadang gagal pada perangkat tertentu.
+Memperbaiki tampilan responsif pada perangkat mobile.
+
+[Versi 1.1.0] - 10 Maret 2025
+Penambahan Fitur
+Presensi Peserta Didik dengan QR Code:
+Peserta didik memperlihatkan QR code kepada petugas.
+Petugas memindai QR code menggunakan aplikasi khusus.
+Jika dipindai dengan aplikasi lain atau kamera, hanya menampilkan NIS.
+Data presensi dikirim ke database secara real-time.
+Pengumuman Real-Time: Admin dapat mengupdate pengumuman yang ditampilkan di halaman utama.
+Perbaikan Bug
+Memperbaiki bug pada animasi loading yang terkadang tidak muncul.
+Memperbaiki kesalahan pada validasi lokasi untuk presensi peserta didik.
+
+[Versi 1.0.0] - 1 Maret 2025
+Rilis Awal
+Fitur Presensi Pegawai:
+Pegawai dapat melakukan presensi dengan menekan tombol yang sesuai dengan nama mereka.
+Validasi lokasi untuk memastikan presensi hanya dilakukan di lokasi yang telah ditentukan.
+Penguncian Tombol: Tombol presensi akan terkunci selama 4 jam setelah diklik untuk mencegah presensi ganda.
+Validasi IP: Aplikasi meminta IP user untuk memastikan input dilakukan dari perangkat yang berbeda.
+Fitur Pengumuman:
+Admin dapat mengupdate pengumuman yang ditampilkan di halaman utama.
+Loading Indicator: Menampilkan indikator loading saat proses presensi sedang berlangsung.
+Konfirmasi Presensi: Menampilkan pesan konfirmasi setelah presensi berhasil dilakukan.
+
+[Versi 0.9.0] - 20 Februari 2025
+Versi Beta
+Fitur Dasar Presensi Pegawai:
+Tombol presensi untuk setiap pegawai.
+Validasi lokasi menggunakan GPS.
+Integrasi dengan Google Apps Script:
+Data presensi dikirim ke Google Sheets sebagai database sementara.
+Tampilan Dasar:
+Desain antarmuka sederhana dengan animasi gradient background.
+
+[Versi 0.8.0] - 15 Februari 2025
+Versi Alpha
+Pembuatan Prototipe:
+Struktur dasar aplikasi dengan HTML, CSS, dan JavaScript.
+Integrasi awal dengan Google Apps Script untuk pengiriman data.
+Fitur Validasi Lokasi:
+Validasi lokasi menggunakan koordinat GPS.
+
+[Maintenance dan Setup Awal]
+Setup Awal GitHub dan Repository
+Membuat repository GitHub untuk proyek Aplikasi Sistem Presensi Shahaba.
+Menyiapkan struktur folder dan file awal untuk proyek.
+Menambahkan file .gitignore untuk mengelola file yang tidak perlu di-commit.
+Penyesuaian Backend (Google Apps Script dan Spreadsheet)
+Menyesuaikan backend setiap kali ada penambahan fitur yang berkaitan dengan pengaturan data:
+  ◦ Menambahkan fungsi baru di Google Apps Script untuk menangani presensi peserta didik.
+  ◦ Memperbarui struktur spreadsheet untuk menampung data presensi peserta didik.
+  ◦ Menambahkan validasi IP dan penguncian tombol di backend.
+Evaluasi dan Perapihan Tampilan Frontend
+Melakukan evaluasi tampilan frontend untuk memastikan responsif dan user-friendly.
+Merapikan struktur file CSS dan JavaScript untuk memudahkan maintenance.
+Menambahkan animasi dan efek visual untuk meningkatkan pengalaman pengguna.
+Testing dan File Sementara
+Membuat file-file sementara untuk testing sebelum di-commit ke repository.
+Melakukan testing pada fitur baru sebelum rilis untuk memastikan tidak ada bug.
+Menambahkan komentar pada kode untuk memudahkan pemahaman tim.
+
+Catatan
+Setiap versi mencakup penambahan fitur baru, perbaikan bug, atau peningkatan performa.
+Aktivitas maintenance dan setup awal tidak memiliki tanggal pasti karena dilakukan secara berkala selama pengembangan.
+Riwayat update ini akan terus diperbarui seiring dengan pengembangan aplikasi.
+
+Cara Menggunakan Changelog
+Tambahkan ke Dokumentasi: Anda bisa menambahkan changelog ini ke bagian akhir dokumentasi utama atau sebagai file terpisah (CHANGELOG.md).
+Update Secara Berkala: Setiap kali ada perubahan atau penambahan fitur baru, update changelog dengan versi dan deskripsi yang sesuai.
+Gunakan Format yang Konsisten: Pastikan setiap entri memiliki format yang sama (versi, tanggal, penambahan fitur, perbaikan bug).
