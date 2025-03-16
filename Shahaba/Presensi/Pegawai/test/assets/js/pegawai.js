@@ -1,8 +1,9 @@
 // Fungsi untuk login pegawai
 async function loginPegawai(username, password) {
     try {
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxMh3SgF8m7KsOT2KemZDXGNTGXO-Ee9ZkGACK7FzgYyDofuWKvL0j6kSCgWAliV2xf/exec';
         const response = await fetch(
-            `https://script.google.com/macros/s/AKfycbyPQ_5UTuUTsizWHxkE1WbR2YjFRke9-_Ya_sFO9_MsaLW5ZbpRoa273W6iTBghSZoZ/exec?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+            `${scriptUrl}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
         );
         const data = await response.json();
         return data;
@@ -12,11 +13,31 @@ async function loginPegawai(username, password) {
     }
 }
 
+// Event listener untuk form login
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const result = await loginPegawai(username, password);
+        if (result && result.success) {
+            window.location.href = 'dashboard.html';
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Gagal',
+                text: result?.message || 'Username atau password salah.',
+            });
+        }
+    });
+});
+
 // Fungsi untuk mencatat ketidakhadiran
 async function catatKetidakhadiran(nama, status, keterangan) {
     try {
         const response = await fetch(
-            `https://script.google.com/macros/s/AKfycbyPQ_5UTuUTsizWHxkE1WbR2YjFRke9-_Ya_sFO9_MsaLW5ZbpRoa273W6iTBghSZoZ/exec?action=absen&nama=${encodeURIComponent(nama)}&status=${encodeURIComponent(status)}&keterangan=${encodeURIComponent(keterangan)}`
+            `https://script.google.com/macros/s/AKfycbxMh3SgF8m7KsOT2KemZDXGNTGXO-Ee9ZkGACK7FzgYyDofuWKvL0j6kSCgWAliV2xf/exec?action=absen&nama=${encodeURIComponent(nama)}&status=${encodeURIComponent(status)}&keterangan=${encodeURIComponent(keterangan)}`
         );
         const data = await response.json();
         return data;
@@ -30,7 +51,7 @@ async function catatKetidakhadiran(nama, status, keterangan) {
 async function lihatSlipGaji(nama, bulan) {
     try {
         const response = await fetch(
-            `https://script.google.com/macros/s/AKfycbyPQ_5UTuUTsizWHxkE1WbR2YjFRke9-_Ya_sFO9_MsaLW5ZbpRoa273W6iTBghSZoZ/exec?action=slipGaji&nama=${encodeURIComponent(nama)}&bulan=${encodeURIComponent(bulan)}`
+            `https://script.google.com/macros/s/AKfycbxMh3SgF8m7KsOT2KemZDXGNTGXO-Ee9ZkGACK7FzgYyDofuWKvL0j6kSCgWAliV2xf/exec?action=slipGaji&nama=${encodeURIComponent(nama)}&bulan=${encodeURIComponent(bulan)}`
         );
         const data = await response.json();
         return data;
@@ -44,7 +65,7 @@ async function lihatSlipGaji(nama, bulan) {
 async function getDataPegawai() {
     try {
         const response = await fetch(
-            `https://script.google.com/macros/s/AKfycbyPQ_5UTuUTsizWHxkE1WbR2YjFRke9-_Ya_sFO9_MsaLW5ZbpRoa273W6iTBghSZoZ/exec?action=getPegawai`
+            `https://script.google.com/macros/s/AKfycbxMh3SgF8m7KsOT2KemZDXGNTGXO-Ee9ZkGACK7FzgYyDofuWKvL0j6kSCgWAliV2xf/exec?action=getPegawai`
         );
         const data = await response.json();
         return data;
@@ -53,30 +74,6 @@ async function getDataPegawai() {
         return null;
     }
 }
-
-// Event listener untuk form login
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    const result = await loginPegawai(username, password);
-    if (result && result.success) {
-        // Simpan data user ke localStorage
-        localStorage.setItem('nama', result.nama);
-        localStorage.setItem('role', result.role);
-
-        // Redirect ke halaman dashboard
-        window.location.href = 'dashboard.html';
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Login Gagal',
-            text: result?.message || 'Username atau password salah.',
-        });
-    }
-});
-
 // Event listener untuk form ketidakhadiran
 document.getElementById('absenFormInput').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -216,7 +213,7 @@ floatingLocationButton.addEventListener('click', async () => {
 async function simpanLokasi(nama, latitude, longitude) {
     try {
         const response = await fetch(
-            `https://script.google.com/macros/s/AKfycbyPQ_5UTuUTsizWHxkE1WbR2YjFRke9-_Ya_sFO9_MsaLW5ZbpRoa273W6iTBghSZoZ/exec?action=simpanLokasi&nama=${encodeURIComponent(nama)}&latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`
+            `https://script.google.com/macros/s/AKfycbxMh3SgF8m7KsOT2KemZDXGNTGXO-Ee9ZkGACK7FzgYyDofuWKvL0j6kSCgWAliV2xf/exec?action=simpanLokasi&nama=${encodeURIComponent(nama)}&latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`
         );
         const data = await response.json();
         return data;
