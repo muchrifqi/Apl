@@ -262,7 +262,7 @@ async function presensi(nama) {
       if (announcement && announcement.trim() !== "") {
         announcementText.textContent = announcement;
       } else {
-        announcementText.textContent = "Tidak ada pengumuman saat ini.";
+        announcementText.textContent = "Memperbarui...";
       }
     }
 
