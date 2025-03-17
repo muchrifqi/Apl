@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fungsi untuk login pegawai
     async function loginPegawai(username, password) {
         try {
-            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzzGxxT6TdW-1qCNa5lrAFhIZN2mussTZUzK4iIIvB_dA4rbvpbyB8KZ8tCQWx5BcSy/exec';
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzJ9tTHPrYpX2LpT2soLupbrZH1pnkkrJ3j6UMMPD7YcSaLWShqvPrBosLzy2waP7Aa/exec';
             const response = await fetch(`${scriptUrl}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
             const data = await response.json();
             return data;
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function catatKetidakhadiran(nama, status, keterangan) {
         try {
             const response = await fetch(
-                `https://script.google.com/macros/s/AKfycbzzGxxT6TdW-1qCNa5lrAFhIZN2mussTZUzK4iIIvB_dA4rbvpbyB8KZ8tCQWx5BcSy/exec?action=absen&nama=${encodeURIComponent(nama)}&status=${encodeURIComponent(status)}&keterangan=${encodeURIComponent(keterangan)}`
+                `https://script.google.com/macros/s/AKfycbzJ9tTHPrYpX2LpT2soLupbrZH1pnkkrJ3j6UMMPD7YcSaLWShqvPrBosLzy2waP7Aa/exec?action=absen&nama=${encodeURIComponent(nama)}&status=${encodeURIComponent(status)}&keterangan=${encodeURIComponent(keterangan)}`
             );
             const data = await response.json();
             return data;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function lihatSlipGaji(nama, bulan) {
         try {
             const response = await fetch(
-                `https://script.google.com/macros/s/AKfycbzzGxxT6TdW-1qCNa5lrAFhIZN2mussTZUzK4iIIvB_dA4rbvpbyB8KZ8tCQWx5BcSy/exec?action=slipGaji&nama=${encodeURIComponent(nama)}&bulan=${encodeURIComponent(bulan)}`
+                `https://script.google.com/macros/s/AKfycbzJ9tTHPrYpX2LpT2soLupbrZH1pnkkrJ3j6UMMPD7YcSaLWShqvPrBosLzy2waP7Aa/exec?action=slipGaji&nama=${encodeURIComponent(nama)}&bulan=${encodeURIComponent(bulan)}`
             );
             const data = await response.json();
             return data;
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function simpanLokasi(nama, latitude, longitude) {
         try {
             const response = await fetch(
-                `https://script.google.com/macros/s/AKfycbzzGxxT6TdW-1qCNa5lrAFhIZN2mussTZUzK4iIIvB_dA4rbvpbyB8KZ8tCQWx5BcSy/exec?action=simpanLokasi&nama=${encodeURIComponent(nama)}&latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`
+                `https://script.google.com/macros/s/AKfycbzJ9tTHPrYpX2LpT2soLupbrZH1pnkkrJ3j6UMMPD7YcSaLWShqvPrBosLzy2waP7Aa/exec?action=simpanLokasi&nama=${encodeURIComponent(nama)}&latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}`
             );
             const data = await response.json();
             return data;
