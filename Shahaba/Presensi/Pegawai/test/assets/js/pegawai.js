@@ -4,20 +4,52 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM sudah siap!");
 
     // Fungsi untuk login pegawai
-    async function loginPegawai(username, password) {
-        try {
+    function loginPegawai(username, password) {
+        return new Promise((resolve, reject) => {
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbzU_BqoiZ1noYfl4Bpl503FJW1-lNrikpmaBgrWwNSSbDremKcupMHTLcZsa3rrXvQh/exec';
-            const response = await fetch(`${scriptUrl}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-            if (!response.ok) {
-                throw new Error('Gagal mengambil data dari server');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error("Gagal login:", error);
-            return null;
-        }
+            const callbackName = 'jsonpCallback_' + Date.now(); // Nama unik untuk callback
+            const url = `${scriptUrl}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&callback=${callbackName}`;
+    
+            // Buat elemen script
+            const script = document.createElement('script');
+            script.src = url;
+    
+            // Tambahkan fungsi callback ke window
+            window[callbackName] = (data) => {
+                resolve(data); // Kirim data ke Promise
+                delete window[callbackName]; // Hapus callback
+                document.body.removeChild(script); // Hapus elemen script
+            };
+    
+            // Tangani error
+            script.onerror = () => {
+                reject(new Error('Gagal mengambil data dari server.'));
+                delete window[callbackName];
+                document.body.removeChild(script);
+            };
+    
+            // Tambahkan script ke body
+            document.body.appendChild(script);
+        });
     }
+    
+    // Contoh penggunaan:
+    loginPegawai('admin', '121321')
+        .then((result) => {
+            console.log("Response dari server:", result);
+            if (result && result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Gagal',
+                    text: result?.message || 'Username atau password salah.',
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Gagal login:", error);
+        });
 
     // Event listener untuk form login
             const loginForm = document.getElementById('loginForm');
