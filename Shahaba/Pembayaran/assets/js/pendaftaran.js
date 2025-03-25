@@ -3,38 +3,6 @@ function formatRupiah(angka) {
     return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Simpan Data (Updated)
-async function simpanData() {
-    const formData = {
-        ...collectFormData('#formPendaftaran'),
-        action: 'saveRegistration'
-    };
-    
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwpRaxd890JFJMCTgYnBCGdKb6TZUhr96Ij-G2D0YFhfAM4zpEG67ocbVnxBU7HZn6L/exec', {
-            method: 'POST',
-            mode: 'cors', // Tambahkan ini
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) throw new Error('Network response was not ok');
-        
-        const result = await response.json();
-        if(result.success) {
-            Swal.fire('Sukses!', 'Pendaftaran berhasil disimpan', 'success');
-            resetForm();
-        } else {
-            Swal.fire('Error', result.message || 'Gagal menyimpan data', 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        Swal.fire('Error', 'Terjadi kesalahan saat menyimpan data: ' + error.message, 'error');
-    }
-}
-
 function collectFormData(selector) {
     const data = {};
     const elements = document.querySelectorAll(`${selector} input, ${selector} select, ${selector} textarea`);
@@ -48,47 +16,6 @@ function collectFormData(selector) {
     return data;
 }
 
-function collectTagihanData() {
-    const tagihan = [];
-    document.querySelectorAll('.tagihan-item').forEach(item => {
-        const jenis = item.querySelector('.jenis-tagihan').value;
-        tagihan.push({
-            jenis: jenis === 'Lainnya' ? item.querySelector('.nama-tagihan').value : jenis,
-            nominal: parseFloat(item.querySelector('.nominal-tagihan').value) || 0
-        });
-    });
-    return tagihan;
-}
-async function simpanData() {
-    const formData = {
-        ...collectFormData('#formPendaftaran'),
-        action: 'saveRegistration'
-    };
-    
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwpRaxd890JFJMCTgYnBCGdKb6TZUhr96Ij-G2D0YFhfAM4zpEG67ocbVnxBU7HZn6L/exec', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        const result = await response.json();
-        if(result.success) {
-            alert('Pendaftaran berhasil disimpan!');
-            resetForm();
-        } else {
-            alert('Error: ' + result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data');
-    }
-}
-function resetForm() {
-    document.getElementById('formPendaftaran').reset();
-}
 async function uploadFiles() {
     const files = [
         document.getElementById('akta_kelahiran').files[0],
@@ -98,36 +25,117 @@ async function uploadFiles() {
     ].filter(file => file);
     
     const uploadPromises = files.map(file => {
-        const formData = new FormData();
-        formData.append('action', 'uploadDocument');
-        formData.append('filename', file.name);
-        formData.append('mimeType', file.type);
-        formData.append('file', file);
-        
-        return fetch('https://script.google.com/macros/s/AKfycbwpRaxd890JFJMCTgYnBCGdKb6TZUhr96Ij-G2D0YFhfAM4zpEG67ocbVnxBU7HZn6L/exec', {
-            method: 'POST',
-            body: formData
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const formData = {
+                    action: 'uploadDocument',
+                    filename: file.name,
+                    mimeType: file.type,
+                    file: e.target.result.split(',')[1]
+                };
+                
+                fetch('https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(resolve)
+                .catch(resolve);
+            };
+            reader.readAsDataURL(file);
         });
     });
     
     return Promise.all(uploadPromises);
 }
+
+async function simpanData(dokumen = {}) {
+    const formData = {
+        ...collectFormData('#formPendaftaran'),
+        dokumen,
+        action: 'saveRegistration'
+    };
+    
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+function resetForm() {
+    document.getElementById('formPendaftaran').reset();
+}
+
 async function handleSubmit() {
-    // Validasi form
-    if(!document.getElementById('formPendaftaran').checkValidity()) {
-        alert('Harap isi semua field yang wajib diisi!');
+    if (!document.getElementById('formPendaftaran').checkValidity()) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Harap isi semua field yang wajib diisi!',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
     try {
+        Swal.fire({
+            title: 'Menyimpan data...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+        
         // Upload file terlebih dahulu
-        const uploadResponses = await uploadFiles();
-        const uploadResults = await Promise.all(uploadResponses.map(r => r.json()));
+        const uploadResults = await uploadFiles();
+        const dokumen = {};
+        
+        uploadResults.forEach((result, index) => {
+            if (result && result.success) {
+                const fieldName = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'][index];
+                dokumen[fieldName] = {
+                    id: result.data.documentId,
+                    url: result.data.documentUrl
+                };
+            }
+        });
         
         // Simpan data pendaftaran
-        await simpanData();
+        const result = await simpanData(dokumen);
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Sukses!',
+            text: 'Pendaftaran berhasil disimpan',
+            confirmButtonText: 'OK'
+        });
+        
+        resetForm();
     } catch (error) {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
+            confirmButtonText: 'OK'
+        });
     }
 }
