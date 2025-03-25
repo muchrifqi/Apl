@@ -119,7 +119,7 @@
             </fieldset>
 
             <div class="form-footer">
-                <button type="button" class="admin-button" onclick="handleSubmit().catch(error => console.error(error))">
+                <button type="submit" class="admin-button">
                     <i class="fas fa-save"></i> Simpan Pendaftaran
                 </button>
                 <button type="button" class="admin-button secondary" onclick="resetForm()">
@@ -127,6 +127,9 @@
                 </button>
             </div>
         </form>
+    </div>
+    <div id="loading" style="display: none;">
+        <i class="fas fa-spinner fa-spin"></i> Memproses...
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/js/pendaftaran.js"></script>

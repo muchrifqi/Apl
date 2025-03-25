@@ -1,168 +1,193 @@
-// Format Rupiah (jika diperlukan)
-function formatRupiah(angka) {
-    return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
-// Kumpulkan data form
-function collectFormData(selector) {
-    const data = {};
-    const elements = document.querySelectorAll(`${selector} input, ${selector} select, ${selector} textarea`);
-    
-    elements.forEach(el => {
-        if (el.id) {
-            data[el.id] = el.value;
-        }
+// pendaftaran.js
+document.addEventListener('DOMContentLoaded', function() {
+    // Validasi form sebelum submit
+    document.getElementById('formPendaftaran').addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleSubmit();
     });
-    
-    return data;
-}
+});
 
-// Reset form
-function resetForm() {
-    document.getElementById('formPendaftaran').reset();
-}
-
-// Handle upload file
-async function uploadFiles() {
-    const files = [
-        document.getElementById('akta_kelahiran').files[0],
-        document.getElementById('ktp_ortu').files[0],
-        document.getElementById('kk').files[0],
-        document.getElementById('foto').files[0]
-    ].filter(file => file);
-    
-    try {
-        const uploadPromises = files.map(file => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const response = await fetch('https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec', {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify({
-                                action: 'uploadDocument',
-                                filename: file.name,
-                                mimeType: file.type,
-                                file: e.target.result.split(',')[1]
-                            })
-                        });
-                        
-                        const result = await response.json();
-                        resolve(result);
-                    } catch (error) {
-                        reject(error);
-                    }
-                };
-                reader.onerror = () => reject(new Error(`Gagal membaca file ${file.name}`));
-                reader.readAsDataURL(file);
-            });
-        });
-        
-        return await Promise.all(uploadPromises);
-    } catch (error) {
-        console.error('Error upload:', error);
-        throw error;
-    }
-}
-
-// Fungsi utama yang diperbaiki
-async function simpanData(dokumen = {}) {
-    const formData = {
-        ...collectFormData('#formPendaftaran'),
-        dokumen,
-        action: 'saveRegistration'
-    };
-    
-    try {
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec';
-        
-        // Tambahkan timestamp untuk menghindari cache
-        const url = `${scriptUrl}?timestamp=${new Date().getTime()}`;
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-            redirect: 'follow'
-        });
-
-        // Handle redirect manual jika diperlukan
-        if (response.redirected) {
-            const redirectedResponse = await fetch(response.url);
-            return await redirectedResponse.json();
-        }
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        
-        if (!result.success) {
-            throw new Error(result.message || 'Gagal menyimpan data');
-        }
-        
-        return result;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
-}
-
-// Fungsi handleSubmit yang diperbaiki
 async function handleSubmit() {
+    // Validasi form
+    if (!validateForm()) {
+        return;
+    }
+
     try {
-        // Tampilkan loading indicator
-        const swalInstance = Swal.fire({
-            title: 'Menyimpan data...',
+        // Tampilkan loading
+        Swal.fire({
+            title: 'Memproses...',
+            html: 'Sedang menyimpan data pendaftaran',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
             }
         });
-        
-        // 1. Upload file terlebih dahulu
-        const uploadResults = await uploadFiles();
-        
-        // 2. Kumpulkan metadata dokumen
-        const dokumen = {};
-        uploadResults.forEach((result, index) => {
-            if (result && result.success) {
-                const fieldNames = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'];
-                dokumen[fieldNames[index]] = {
-                    id: result.data.documentId,
-                    url: result.data.documentUrl
-                };
-            }
-        });
-        
-        // 3. Simpan data pendaftaran
-        const result = await simpanData(dokumen);
-        
-        // 4. Tampilkan hasil
-        await Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: result.message || 'Data berhasil disimpan',
-            confirmButtonText: 'OK'
-        });
-        
-        // 5. Reset form jika sukses
-        if (result.success) {
-            resetForm();
+
+        // Kumpulkan data form
+        const formData = collectFormData();
+
+        // Kirim data ke Google Apps Script
+        const response = await sendToGoogleAppsScript(formData);
+
+        // Tampilkan hasil
+        if (response.result === 'success') {
+            Swal.fire({
+                title: 'Sukses!',
+                text: 'Pendaftaran berhasil disimpan',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                resetForm();
+            });
+        } else {
+            throw new Error(response.message || 'Gagal menyimpan data');
         }
-        
     } catch (error) {
-        await Swal.fire({
-            icon: 'error',
-            title: 'Error',
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error!',
             text: error.message || 'Terjadi kesalahan saat menyimpan data',
+            icon: 'error',
             confirmButtonText: 'OK'
         });
-    } finally {
-        Swal.close();
     }
+}
+
+function validateForm() {
+    // Validasi field required
+    const requiredFields = [
+        'nama_lengkap', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat',
+        'nama_ayah', 'nama_ibu', 'no_hp',
+        'akta_kelahiran', 'ktp_ortu', 'kk'
+    ];
+
+    for (const fieldId of requiredFields) {
+        const field = document.getElementById(fieldId);
+        if (!field.value) {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: `Field ${field.labels[0].textContent} harus diisi`,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            field.focus();
+            return false;
+        }
+    }
+
+    // Validasi email jika diisi
+    const email = document.getElementById('email').value;
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        Swal.fire({
+            title: 'Perhatian!',
+            text: 'Format email tidak valid',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        document.getElementById('email').focus();
+        return false;
+    }
+
+    // Validasi nomor HP
+    const noHp = document.getElementById('no_hp').value;
+    if (!/^[0-9]{10,13}$/.test(noHp)) {
+        Swal.fire({
+            title: 'Perhatian!',
+            text: 'Nomor HP harus 10-13 digit angka',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        document.getElementById('no_hp').focus();
+        return false;
+    }
+
+    // Validasi file upload
+    const fileFields = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'];
+    for (const fieldId of fileFields) {
+        const field = document.getElementById(fieldId);
+        if (field.required && !field.files[0]) {
+            Swal.fire({
+                title: 'Perhatian!',
+                text: `File ${field.labels[0].textContent} harus diupload`,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function collectFormData() {
+    const formData = {
+        // Data peserta didik
+        nama_lengkap: document.getElementById('nama_lengkap').value,
+        jenis_kelamin: document.getElementById('jenis_kelamin').value,
+        tempat_lahir: document.getElementById('tempat_lahir').value,
+        tanggal_lahir: document.getElementById('tanggal_lahir').value,
+        alamat: document.getElementById('alamat').value,
+        
+        // Data orang tua
+        nama_ayah: document.getElementById('nama_ayah').value,
+        pekerjaan_ayah: document.getElementById('pekerjaan_ayah').value,
+        nama_ibu: document.getElementById('nama_ibu').value,
+        pekerjaan_ibu: document.getElementById('pekerjaan_ibu').value,
+        no_hp: document.getElementById('no_hp').value,
+        email: document.getElementById('email').value,
+        
+        // Info lampiran (hanya nama file, file sebenarnya akan diupload terpisah)
+        akta_kelahiran: document.getElementById('akta_kelahiran').files[0]?.name || '',
+        ktp_ortu: document.getElementById('ktp_ortu').files[0]?.name || '',
+        kk: document.getElementById('kk').files[0]?.name || '',
+        foto: document.getElementById('foto').files[0]?.name || ''
+    };
+
+    return formData;
+}
+const maxSize = 2 * 1024 * 1024; // 2MB
+if (field.files[0] && field.files[0].size > maxSize) {
+    Swal.fire({
+        title: 'Perhatian!',
+        text: `Ukuran file ${field.labels[0].textContent} terlalu besar (maks 2MB)`,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+    return false;
+}
+
+async function sendToGoogleAppsScript(formData) {
+    // Ganti dengan URL deployment Google Apps Script Anda
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbz96b87D1nnqoFc1vjUxa18dJnQRbN2_pFnCk81inGtlHzjuRxaU86144S94ZkvEEQ/exec';
+    
+    try {
+        const response = await fetch(scriptUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            mode: 'no-cors' // Penting untuk Google Apps Script
+        });
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Gagal mengirim data ke server');
+    }
+}
+function resetForm() {
+    Swal.fire({
+        title: 'Reset Form?',
+        text: 'Semua data yang telah diisi akan dihapus',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Reset',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('formPendaftaran').reset();
+        }
+    });
 }
