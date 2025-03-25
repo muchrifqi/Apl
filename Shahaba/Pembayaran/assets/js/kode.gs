@@ -1,85 +1,113 @@
-// 1. MAIN FUNCTIONS
+function doGet(e) {
+  return handleRequest(e);
+}
+
 function doPost(e) {
-  // Handle CORS preflight
-  if (e.queryString === 'cors') {
+  return handleRequest(e);
+}
+
+function handleRequest(e) {
+  // Set CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type'
+  };
+  
+  // Handle preflight request
+  if (e.method === 'OPTIONS') {
     return ContentService.createTextOutput()
       .setMimeType(ContentService.MimeType.JSON)
-      .append(JSON.stringify({}))
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-      .setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      .setHeaders(headers);
   }
-
-  const action = e.parameter.action;
-  const ss = SpreadsheetApp.openById('14ZC8bQElzfvddIQa2L90ClcU5dk1I3zGzFXP5RhgcDQ');
   
   try {
+    const ss = SpreadsheetApp.openById('14ZC8bQElzfvddIQa2L90ClcU5dk1I3zGzFXP5RhgcDQ');
     let result;
-    if (action === 'saveRegistration') {
-      result = saveRegistration(ss, e);
-    } else if (action === 'uploadDocument') {
-      result = uploadDocument(e);
-    } else {
-      result = responseError('Invalid action');
+    
+    if (e.postData && e.postData.contents) {
+      const data = JSON.parse(e.postData.contents);
+      if (data.action === 'saveRegistration') {
+        result = saveRegistration(ss, data);
+      }
+      // Tambahkan action lainnya sesuai kebutuhan
     }
     
-    // Tambahkan header CORS untuk response normal
-    return result
-      .setHeader('Access-Control-Allow-Origin', '*')
-      .setHeader('Access-Control-Allow-Methods', 'POST');
+    return ContentService.createTextOutput(JSON.stringify(result || {success: false, message: 'No action specified'}))
+      .setMimeType(ContentService.MimeType.JSON)
+      .setHeaders(headers);
       
   } catch (error) {
-    return responseError(error.message)
-      .setHeader('Access-Control-Allow-Origin', '*');
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      message: error.message
+    }))
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeaders(headers);
   }
 }
 
-// Tambahkan doGet untuk handle preflight
-function doGet(e) {
-  if (e.parameter.action === 'checkDuplicate') {
-    return checkDuplicate(SpreadsheetApp.openById('14ZC8bQElzfvddIQa2L90ClcU5dk1I3zGzFXP5RhgcDQ'), e.parameter.nis)
-      .setHeader('Access-Control-Allow-Origin', '*');
-  }
-  
-  return ContentService.createTextOutput()
-    .setMimeType(ContentService.MimeType.JSON)
-    .append(JSON.stringify({}))
-    .setHeader('Access-Control-Allow-Origin', '*')
-    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-}
+// Fungsi saveRegistration dan lainnya tetap sama
 
 // 2. CORE FUNCTIONS
 function saveRegistration(ss, e) {
   const sheet = ss.getSheetByName('Registrasi');
   const data = JSON.parse(e.postData.contents);
   
-  // Prepare data row
+  // Validasi data wajib
+  const requiredFields = ['nama_lengkap', 'jenis_kelamin', 'tanggal_lahir', 'nama_ayah', 'nama_ibu', 'no_hp'];
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return responseError(`Field ${field} harus diisi`);
+    }
+  }
+
   const rowData = [
-    new Date(), // Timestamp
-    Utilities.getUuid(), // Registration ID
+    new Date(),
+    Utilities.getUuid(),
     data.nama_lengkap,
     data.jenis_kelamin,
     data.tempat_lahir,
     data.tanggal_lahir,
     data.alamat,
     data.nama_ayah,
-    data.pekerjaan_ayah,
+    data.pekerjaan_ayah || '',
     data.nama_ibu,
-    data.pekerjaan_ibu,
+    data.pekerjaan_ibu || '',
     data.no_hp,
-    data.email,
-    data.jenjang || '', // Removed financial fields
-    '', // Removed payment method
-    '', // Removed financial notes
-    JSON.stringify(data.dokumen || {}) // Store document metadata
+    data.email || '',
+    data.jenjang || '',
+    JSON.stringify(data.dokumen || {})
   ];
   
   sheet.appendRow(rowData);
   
   return responseSuccess({
     registrationId: rowData[1],
-    message: "Registration saved successfully"
+    message: "Registrasi berhasil disimpan"
   });
+}
+
+function getStudents(ss) {
+  const sheet = ss.getSheetByName('Registrasi');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+  const students = [];
+  
+  for (let i = 1; i < data.length; i++) {
+    const student = {};
+    for (let j = 0; j < headers.length; j++) {
+      student[headers[j]] = data[i][j];
+    }
+    students.push({
+      nama: student.nama_lengkap,
+      jenjang: student.jenjang,
+      orangTua: student.nama_ayah, // atau field lain yang sesuai
+      telepon: student.no_hp
+    });
+  }
+  
+  return responseSuccess(students);
 }
 
 function uploadDocument(e) {

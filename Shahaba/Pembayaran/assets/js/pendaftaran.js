@@ -47,7 +47,7 @@ async function simpanData() {
         // Dapatkan token OAuth 2.0 (implementasi tergantung pada sistem auth Anda)
         const token = await getAuthToken();
         
-        const scriptId = 'AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr';
+        const scriptId = 'AKfycbyGwc5Cmj1nB1-wMecx_qNv4zI7bojRERlIDrVcS6AYagLHf4tAoApVjR439xw6gKE2';
         const url = `https://script.googleapis.com/v1/scripts/${scriptId}:run`;
         
         const response = await fetch(url, {
@@ -101,7 +101,7 @@ async function uploadFiles() {
                             file: e.target.result.split(',')[1]
                         };
                         
-                        const response = await fetch('https://script.google.com/macros/s/AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr/exec', {
+                        const response = await fetch('https://script.google.com/macros/s/AKfycbyGwc5Cmj1nB1-wMecx_qNv4zI7bojRERlIDrVcS6AYagLHf4tAoApVjR439xw6gKE2/exec', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
