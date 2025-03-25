@@ -67,68 +67,100 @@ async function uploadFiles() {
 }
 
 // Simpan data utama
+// Fungsi utama yang diperbaiki
 async function simpanData(dokumen = {}) {
+    const formData = {
+        ...collectFormData('#formPendaftaran'),
+        dokumen,
+        action: 'saveRegistration'
+    };
+    
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                action: 'saveRegistration',
-                ...collectFormData('#formPendaftaran'),
-                dokumen: dokumen
-            })
-        });
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec';
         
-        return await response.json();
+        // Tambahkan timestamp untuk menghindari cache
+        const url = `${scriptUrl}?timestamp=${new Date().getTime()}`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+            redirect: 'follow'
+        });
+
+        // Handle redirect manual jika diperlukan
+        if (response.redirected) {
+            const redirectedResponse = await fetch(response.url);
+            return await redirectedResponse.json();
+        }
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.message || 'Gagal menyimpan data');
+        }
+        
+        return result;
     } catch (error) {
-        console.error('Error simpan:', error);
+        console.error('Error:', error);
         throw error;
     }
 }
 
-// Handle submit
+// Fungsi handleSubmit yang diperbaiki
 async function handleSubmit() {
     try {
+        // Tampilkan loading indicator
         const swalInstance = Swal.fire({
-            title: 'Menyimpan Data',
-            html: 'Sedang memproses data...',
+            title: 'Menyimpan data...',
             allowOutsideClick: false,
-            didOpen: () => Swal.showLoading()
+            didOpen: () => {
+                Swal.showLoading();
+            }
         });
         
-        // 1. Upload file
+        // 1. Upload file terlebih dahulu
         const uploadResults = await uploadFiles();
         
         // 2. Kumpulkan metadata dokumen
-        const dokumen = uploadResults.reduce((acc, result, index) => {
-            const fieldNames = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'];
-            if(result.success) {
-                acc[fieldNames[index]] = {
+        const dokumen = {};
+        uploadResults.forEach((result, index) => {
+            if (result && result.success) {
+                const fieldNames = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'];
+                dokumen[fieldNames[index]] = {
                     id: result.data.documentId,
                     url: result.data.documentUrl
                 };
             }
-            return acc;
-        }, {});
+        });
         
-        // 3. Simpan data registrasi
+        // 3. Simpan data pendaftaran
         const result = await simpanData(dokumen);
         
         // 4. Tampilkan hasil
         await Swal.fire({
-            icon: result.success ? 'success' : 'error',
-            title: result.success ? 'Berhasil!' : 'Gagal!',
-            text: result.message,
+            icon: 'success',
+            title: 'Sukses!',
+            text: result.message || 'Data berhasil disimpan',
             confirmButtonText: 'OK'
         });
         
-        if(result.success) resetForm();
+        // 5. Reset form jika sukses
+        if (result.success) {
+            resetForm();
+        }
         
     } catch (error) {
         await Swal.fire({
             icon: 'error',
-            title: 'Error Sistem',
-            text: error.message,
+            title: 'Error',
+            text: error.message || 'Terjadi kesalahan saat menyimpan data',
             confirmButtonText: 'OK'
         });
     } finally {
