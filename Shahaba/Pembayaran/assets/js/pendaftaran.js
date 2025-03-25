@@ -35,7 +35,7 @@ async function uploadFiles() {
                     file: e.target.result.split(',')[1]
                 };
                 
-                fetch('https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec', {
+                fetch('https://script.google.com/macros/s/AKfycbzRItuBaUHEDAsNSu1nuE1k7klUvpy0fyVmhiR7E-kMaq_qNN90tKo2u6vtzKBIq5Pz/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -53,51 +53,44 @@ async function uploadFiles() {
     return Promise.all(uploadPromises);
 }
 
-async function simpanData(dokumen = {}) {
+async function simpanData() {
     const formData = {
         ...collectFormData('#formPendaftaran'),
-        dokumen,
         action: 'saveRegistration'
     };
     
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec', {
+        // Gunakan URL deployment Google Apps Script yang benar
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbzRItuBaUHEDAsNSu1nuE1k7klUvpy0fyVmhiR7E-kMaq_qNN90tKo2u6vtzKBIq5Pz/exec';
+        
+        // Tambahkan timestamp untuk menghindari cache
+        const url = `${scriptUrl}?timestamp=${new Date().getTime()}`;
+        
+        const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(formData),
+            redirect: 'follow' // Penting untuk Google Apps Script
         });
         
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        // Handle redirect manual jika diperlukan
+        if (response.redirected) {
+            const redirectedResponse = await fetch(response.url);
+            return await redirectedResponse.json();
         }
         
-        const result = await response.json();
-        return result;
+        return await response.json();
     } catch (error) {
         console.error('Error:', error);
         throw error;
     }
 }
 
-function resetForm() {
-    document.getElementById('formPendaftaran').reset();
-}
-
 async function handleSubmit() {
-    if (!document.getElementById('formPendaftaran').checkValidity()) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Harap isi semua field yang wajib diisi!',
-            confirmButtonText: 'OK'
-        });
-        return;
-    }
-    
     try {
-        Swal.fire({
+        await Swal.fire({
             title: 'Menyimpan data...',
             allowOutsideClick: false,
             didOpen: () => {
@@ -105,36 +98,21 @@ async function handleSubmit() {
             }
         });
         
-        // Upload file terlebih dahulu
-        const uploadResults = await uploadFiles();
-        const dokumen = {};
+        const result = await simpanData();
         
-        uploadResults.forEach((result, index) => {
-            if (result && result.success) {
-                const fieldName = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'][index];
-                dokumen[fieldName] = {
-                    id: result.data.documentId,
-                    url: result.data.documentUrl
-                };
-            }
-        });
-        
-        // Simpan data pendaftaran
-        const result = await simpanData(dokumen);
-        
-        Swal.fire({
+        await Swal.fire({
             icon: 'success',
             title: 'Sukses!',
-            text: 'Pendaftaran berhasil disimpan',
+            text: result.message || 'Data berhasil disimpan',
             confirmButtonText: 'OK'
         });
         
         resetForm();
     } catch (error) {
-        Swal.fire({
+        await Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Terjadi kesalahan saat menyimpan data: ' + error.message,
+            text: error.message || 'Gagal menyimpan data',
             confirmButtonText: 'OK'
         });
     }
