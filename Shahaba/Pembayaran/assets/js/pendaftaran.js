@@ -37,40 +37,39 @@ if (typeof Swal === 'undefined') {
         }
     };
 }
-async function simpanData(dokumen = {}) {
+async function simpanData() {
     const formData = {
         ...collectFormData('#formPendaftaran'),
-        dokumen,
         action: 'saveRegistration'
     };
     
     try {
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec';
-        const url = `${scriptUrl}?timestamp=${new Date().getTime()}`;
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr/exec';
         
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-            redirect: 'follow'
+        // Gunakan pendekatan JSONP untuk menghindari CORS
+        const jsonpUrl = `${scriptUrl}?callback=handleResponse&data=${encodeURIComponent(JSON.stringify(formData))}`;
+        
+        return new Promise((resolve, reject) => {
+            window.handleResponse = (response) => {
+                delete window.handleResponse;
+                if (response.success) {
+                    resolve(response);
+                } else {
+                    reject(new Error(response.message));
+                }
+            };
+            
+            const script = document.createElement('script');
+            script.src = jsonpUrl;
+            script.onerror = () => {
+                reject(new Error('Failed to load script'));
+                document.head.removeChild(script);
+            };
+            document.head.appendChild(script);
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        
-        if (!result.success) {
-            throw new Error(result.message || 'Gagal menyimpan data');
-        }
-        
-        return result;
     } catch (error) {
-        console.error('Error in simpanData:', error);
-        throw error; // Re-throw error untuk ditangkap oleh caller
+        console.error('Error:', error);
+        throw error;
     }
 }
 
@@ -95,7 +94,7 @@ async function uploadFiles() {
                             file: e.target.result.split(',')[1]
                         };
                         
-                        const response = await fetch('https://script.google.com/macros/s/AKfycbznj4FeWebdRPdC4cQ51HAkuPuEAgwxM8elDvY9YWzafRlWmFrkxRrivk73tBUnVBze/exec', {
+                        const response = await fetch('https://script.google.com/macros/s/AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr/exec', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
