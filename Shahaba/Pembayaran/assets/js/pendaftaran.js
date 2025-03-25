@@ -44,29 +44,36 @@ async function simpanData() {
     };
     
     try {
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr/exec';
+        // Dapatkan token OAuth 2.0 (implementasi tergantung pada sistem auth Anda)
+        const token = await getAuthToken();
         
-        // Gunakan pendekatan JSONP untuk menghindari CORS
-        const jsonpUrl = `${scriptUrl}?callback=handleResponse&data=${encodeURIComponent(JSON.stringify(formData))}`;
+        const scriptId = 'AKfycbwCmBcj-D3p1Yv8osIGyeyxUV4_QF-l3Xg_gpoRg6mwiKDzlPY2L3YasuE8SNQ1QPZr';
+        const url = `https://script.googleapis.com/v1/scripts/${scriptId}:run`;
         
-        return new Promise((resolve, reject) => {
-            window.handleResponse = (response) => {
-                delete window.handleResponse;
-                if (response.success) {
-                    resolve(response);
-                } else {
-                    reject(new Error(response.message));
-                }
-            };
-            
-            const script = document.createElement('script');
-            script.src = jsonpUrl;
-            script.onerror = () => {
-                reject(new Error('Failed to load script'));
-                document.head.removeChild(script);
-            };
-            document.head.appendChild(script);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                function: 'saveRegistration',
+                parameters: [formData],
+                devMode: true
+            })
         });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.error) {
+            throw new Error(result.error.message);
+        }
+        
+        return result.response.result;
     } catch (error) {
         console.error('Error:', error);
         throw error;
