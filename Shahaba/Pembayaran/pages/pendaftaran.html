@@ -130,5 +130,15 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/js/pendaftaran.js"></script>
+    <!-- Tambahkan ini sebelum penutup </body> -->
+<script>
+    // Pastikan SweetAlert terload
+    window.addEventListener('load', () => {
+        if(typeof Swal === 'undefined') {
+            alert('Error: SweetAlert2 tidak terload!');
+            document.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        }
+    });
+</script>
 </body>
 </html>

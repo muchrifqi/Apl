@@ -1,85 +1,28 @@
-// Format Rupiah
+// Format Rupiah (jika diperlukan)
 function formatRupiah(angka) {
     return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
+// Kumpulkan data form
 function collectFormData(selector) {
     const data = {};
     const elements = document.querySelectorAll(`${selector} input, ${selector} select, ${selector} textarea`);
     
     elements.forEach(el => {
-        if (el.id && !el.classList.contains('nominal-tagihan') && !el.classList.contains('jenis-tagihan')) {
+        if (el.id) {
             data[el.id] = el.value;
         }
     });
     
     return data;
 }
-// Debug SweetAlert
-console.log('SweetAlert available:', typeof Swal !== 'undefined');
 
-// Fallback jika SweetAlert gagal dimuat
-if (typeof Swal === 'undefined') {
-    console.error('SweetAlert2 not loaded! Using fallback alerts');
-    window.Swal = {
-        fire: function(options) {
-            alert(options.title + '\n' + (options.text || ''));
-            return Promise.resolve({ isConfirmed: true });
-        },
-        showLoading: function() {
-            console.log('Loading...');
-        },
-        close: function() {
-            console.log('Closing alert');
-        },
-        isVisible: function() {
-            return false;
-        }
-    };
-}
-async function simpanData() {
-    const formData = {
-        ...collectFormData('#formPendaftaran'),
-        action: 'saveRegistration'
-    };
-    
-    try {
-        // Dapatkan token OAuth 2.0 (implementasi tergantung pada sistem auth Anda)
-        const token = await getAuthToken();
-        
-        const scriptId = 'AKfycbyGwc5Cmj1nB1-wMecx_qNv4zI7bojRERlIDrVcS6AYagLHf4tAoApVjR439xw6gKE2';
-        const url = `https://script.googleapis.com/v1/scripts/${scriptId}:run`;
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                function: 'saveRegistration',
-                parameters: [formData],
-                devMode: true
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        
-        if (result.error) {
-            throw new Error(result.error.message);
-        }
-        
-        return result.response.result;
-    } catch (error) {
-        console.error('Error:', error);
-        throw error;
-    }
+// Reset form
+function resetForm() {
+    document.getElementById('formPendaftaran').reset();
 }
 
+// Handle upload file
 async function uploadFiles() {
     const files = [
         document.getElementById('akta_kelahiran').files[0],
@@ -94,25 +37,16 @@ async function uploadFiles() {
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     try {
-                        const formData = {
-                            action: 'uploadDocument',
-                            filename: file.name,
-                            mimeType: file.type,
-                            file: e.target.result.split(',')[1]
-                        };
-                        
-                        const response = await fetch('https://script.google.com/macros/s/AKfycbyGwc5Cmj1nB1-wMecx_qNv4zI7bojRERlIDrVcS6AYagLHf4tAoApVjR439xw6gKE2/exec', {
+                        const response = await fetch('https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec', {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(formData),
-                            redirect: 'follow'
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                action: 'uploadDocument',
+                                filename: file.name,
+                                mimeType: file.type,
+                                file: e.target.result.split(',')[1]
+                            })
                         });
-                        
-                        if (!response.ok) {
-                            throw new Error(`Upload failed for ${file.name}`);
-                        }
                         
                         const result = await response.json();
                         resolve(result);
@@ -120,92 +54,84 @@ async function uploadFiles() {
                         reject(error);
                     }
                 };
-                reader.onerror = () => reject(new Error(`Failed to read file ${file.name}`));
+                reader.onerror = () => reject(new Error(`Gagal membaca file ${file.name}`));
                 reader.readAsDataURL(file);
             });
         });
         
         return await Promise.all(uploadPromises);
     } catch (error) {
-        console.error('Error in uploadFiles:', error);
+        console.error('Error upload:', error);
         throw error;
     }
 }
 
-async function handleSubmit() {
-    // Tutup semua SweetAlert yang mungkin masih terbuka
-    Swal.close();
-    
+// Simpan data utama
+async function simpanData(dokumen = {}) {
     try {
-        // Tampilkan loading indicator
+        const response = await fetch('https://script.google.com/macros/s/AKfycbz2ZnhFeXB0k2SUdocCCfFxTO6soPceAjw04ogOv2hX2Ix444GJQ2xMBoPej0ZvAmQQ/exec', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                action: 'saveRegistration',
+                ...collectFormData('#formPendaftaran'),
+                dokumen: dokumen
+            })
+        });
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error simpan:', error);
+        throw error;
+    }
+}
+
+// Handle submit
+async function handleSubmit() {
+    try {
         const swalInstance = Swal.fire({
-            title: 'Menyimpan data...',
+            title: 'Menyimpan Data',
+            html: 'Sedang memproses data...',
             allowOutsideClick: false,
-            didOpen: () => {
-                Swal.showLoading();
-            },
-            willClose: () => {
-                // Bersihkan timer jika ada
-                clearTimeout(window.swalTimeout);
-            }
+            didOpen: () => Swal.showLoading()
         });
-
-        // Timeout fallback (8 detik)
-        window.swalTimeout = setTimeout(() => {
-            if (Swal.isVisible()) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Memakan waktu lebih lama',
-                    text: 'Proses penyimpanan masih berjalan...',
-                    confirmButtonText: 'OK'
-                });
-            }
-        }, 8000);
-
-        // Upload file terlebih dahulu
-        const uploadResults = await uploadFiles().catch(error => {
-            throw new Error(`Gagal mengunggah file: ${error.message}`);
-        });
-
-        const dokumen = {};
-        uploadResults.forEach((result, index) => {
-            if (result && result.success) {
-                const fieldName = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'][index];
-                dokumen[fieldName] = {
+        
+        // 1. Upload file
+        const uploadResults = await uploadFiles();
+        
+        // 2. Kumpulkan metadata dokumen
+        const dokumen = uploadResults.reduce((acc, result, index) => {
+            const fieldNames = ['akta_kelahiran', 'ktp_ortu', 'kk', 'foto'];
+            if(result.success) {
+                acc[fieldNames[index]] = {
                     id: result.data.documentId,
                     url: result.data.documentUrl
                 };
             }
-        });
-
-        // Simpan data pendaftaran
-        const result = await simpanData(dokumen).catch(error => {
-            throw new Error(`Gagal menyimpan data: ${error.message}`);
-        });
-
-        // Tutup loading indicator
-        await swalInstance;
-        Swal.close();
-
-        // Tampilkan hasil sukses
+            return acc;
+        }, {});
+        
+        // 3. Simpan data registrasi
+        const result = await simpanData(dokumen);
+        
+        // 4. Tampilkan hasil
         await Swal.fire({
-            icon: 'success',
-            title: 'Sukses!',
-            text: result.message || 'Pendaftaran berhasil disimpan',
+            icon: result.success ? 'success' : 'error',
+            title: result.success ? 'Berhasil!' : 'Gagal!',
+            text: result.message,
             confirmButtonText: 'OK'
         });
-
-        resetForm();
-    } catch (error) {
-        // Pastikan semua SweetAlert ditutup sebelum menampilkan error
-        Swal.close();
         
-        console.error('Error:', error);
+        if(result.success) resetForm();
+        
+    } catch (error) {
         await Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: error.message || 'Terjadi kesalahan saat menyimpan data',
+            title: 'Error Sistem',
+            text: error.message,
             confirmButtonText: 'OK'
         });
+    } finally {
+        Swal.close();
     }
 }
