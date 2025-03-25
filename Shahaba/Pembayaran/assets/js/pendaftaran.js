@@ -66,7 +66,6 @@ async function uploadFiles() {
     }
 }
 
-// Simpan data utama
 // Fungsi utama yang diperbaiki
 async function simpanData(dokumen = {}) {
     const formData = {
