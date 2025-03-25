@@ -1,0 +1,891 @@
+:root {
+    --primary-color: #172e69; /* Warna biru shahaba sd */
+    --secondary-color: #2b2b2b; 
+    --accent-color: #e15f0e;
+    --background-gradient: linear-gradient(-45deg, /*#57c7de*/ #3693cc, #172e69); /* Gradien biru */
+    --text-color: white; /* Warna teks putih */
+    --error-color: #b82f25; /* Warna merah untuk pesan error */
+    --success-color: #006c04; /* Warna hijau untuk pesan sukses */
+    --button-hover-color: #1e7637; /* Warna hijau saat hover */
+    --border-radius: 25px;
+    /* Swal warna */
+    --swal-primary-color: #172e69; 
+    --swal-secondary-color: #ee9d15; 
+    --swal-accent-color: #e15f0e; 
+    --swal-text-color: #172e69; /* Warna teks utama */
+    --swal-text-secondary-color: #484848; /* Warna teks sekunder */
+    --swal-background-color: #ffffff; /* Warna latar belakang modal */
+    --swal-border-color: #cccccc; /* Warna border input */
+    --swal-shadow-color: rgba(0, 0, 0, 0.15); /* Warna shadow */
+
+    /* Ukuran */
+    --swal-width: 80%; /* Lebar modal */
+    --swal-max-width: 600px; /* Maksimum lebar modal */
+    --swal-font-size: 14.5px; /* Ukuran font teks */
+    --swal-title-font-size: 20px; /* Ukuran font judul */
+    --swal-padding: 20px; /* Padding modal */
+    --swal-border-radius: 25px; /* Border radius modal */
+    --swal-button-padding: 10px 20px; /* Padding tombol */
+    --swal-button-border-radius: 5px; /* Border radius tombol */
+    --swal-input-width: 90%; /* Lebar input */
+    --swal-input-padding: 10px; /* Padding input */
+    --swal-icon-size: 70px; /* Ukuran ikon */
+    }
+
+    /* Style untuk modal SweetAlert2 */
+    .swal2-popup {
+    width: var(--swal-width) !important;
+    max-width: var(--swal-max-width) !important;
+    font-size: var(--swal-font-size) !important;
+    padding: var(--swal-padding) !important;
+    border-radius: var(--swal-border-radius) !important;
+    background-color: var(--swal-background-color) !important;
+    box-shadow: 0 4px 12px var(--swal-shadow-color) !important;
+    }
+
+    /* Style untuk judul modal */
+    .swal2-title {
+    font-size: var(--swal-title-font-size) !important;
+    font-weight: bold !important;
+    color: var(--swal-text-color) !important;
+    margin-bottom: 10px !important;
+    }
+
+    /* Style untuk teks modal */
+    .swal2-html-container {
+    font-size: var(--swal-font-size) !important;
+    color: var(--swal-text-secondary-color) !important;
+    margin-bottom: 20px !important;
+    }
+
+    /* Style untuk ikon modal */
+    .swal2-icon {
+    width: var(--swal-icon-size) !important;
+    height: var(--swal-icon-size) !important;
+    margin: 10px auto 10px !important;
+    }
+    .swal2-icon.swal2-success { color: var(--swal-primary-color) !important; }
+    .swal2-icon.swal2-error { color: var(--swal-secondary-color) !important; }
+    .swal2-icon.swal2-warning { color: #ff9800 !important; }
+    .swal2-icon.swal2-info { color: var(--swal-accent-color) !important; }
+    .swal2-icon.swal2-question { color: var(--swal-secondary-color) !important; }
+
+    /* Style untuk tombol konfirmasi */
+    .swal2-confirm {
+    background-color: #3693cc !important;
+    border-radius: var(--swal-button-border-radius) !important;
+    color: white !important;
+    font-size: var(--swal-font-size) !important;
+    padding: var(--swal-button-padding) !important;
+    margin: 0 5px !important;
+    border: none !important;
+    cursor: pointer !important;
+    }
+    .swal2-confirm:hover {
+    background-color: #172e69 !important; /* Warna saat hover */
+    }
+
+
+    /* Style untuk tombol cancel */
+    .swal2-cancel {
+    background-color: var(--swal-secondary-color) !important;
+    border-radius: var(--swal-button-border-radius) !important;
+    color: white !important;
+    font-size: var(--swal-font-size) !important;
+    padding: var(--swal-button-padding) !important;
+    margin: 0 5px !important;
+    border: none !important;
+    cursor: pointer !important;
+    }
+    .swal2-cancel:hover {
+    background-color: #707070 !important; /* Warna saat hover */
+    }
+
+    /* Style untuk input (text, password, dll.) */
+    .swal2-input {
+    width: var(--swal-input-width) !important;
+    padding: var(--swal-input-padding) !important;
+    border: 1px solid var(--swal-border-color) !important;
+    border-radius: var(--swal-button-border-radius) !important;
+    font-size: var(--swal-font-size) !important;
+    margin: 10px auto !important;
+    }
+    .swal2-input:focus {
+    border-color: var(--swal-primary-color) !important;
+    outline: none !important;
+    }
+
+    /* Style untuk gambar di modal */
+    .swal2-image {
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 10px auto !important;
+    border-radius: var(--swal-button-border-radius) !important;
+    }
+
+    /* Style untuk footer modal */
+    .swal2-footer {
+    font-size: 12px !important;
+    color: var(--swal-text-secondary-color) !important;
+    margin-top: 10px !important;
+    }
+    /* Style untuk tombol pada layar kecil */
+@media (max-width: 600px) {
+    .swal2-actions {
+      flex-direction: column; /* Susun tombol secara vertikal */
+      gap: 10px; /* Jarak antara tombol */
+    }
+  
+    .swal2-confirm,
+    .swal2-cancel {
+      width: 100%; /* Lebar tombol 100% */
+      margin: 0 !important; /* Hapus margin default */
+    }
+  }
+    /* Sembunyikan scrollbar tapi tetap bisa di-scroll di seluruh halaman */
+    html, body {
+        overflow: auto; /* Tetap memungkinkan scrolling */
+        scrollbar-width: none; /* Untuk Firefox */
+        -ms-overflow-style: none; /* Untuk IE dan Edge */
+    }
+
+    /* Untuk Chrome, Safari, dan browser berbasis WebKit */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
+    }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-gradient);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:baseline;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    overflow:auto;
+}
+
+.divider {
+    height: 2px;
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+    margin-top: 3rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.curve {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: white;
+    border-radius: 0 0 50% 50%;
+    transform: scaleX(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.curve h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.curve h2 {
+    color: var(--secondary-color);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: normal;
+    text-align: center;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+    gap: 1rem;
+}
+
+button {
+    letter-spacing: 0.7px; /* Mengatur jarak huruf */
+    line-height: 1.3;    /* Mengatur jarak baris */
+    padding: 0.7rem;
+    font-size: 14px;
+    background: rgba(173, 173, 173, 0.468);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+    background: var(--button-hover-color);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-5px);
+}
+
+button:disabled {
+    background: #126128;
+    border-color: rgba(255, 255, 255, 0.406);
+    cursor: not-allowed;
+}
+/* Gaya khusus untuk tombol yang dinonaktifkan setelah 06:45 */
+button.disabled-after-time:disabled {
+    background: #5c5c5c;
+    border-color: rgba(255, 255, 255, 0.406);
+    color: white;
+}
+
+.footer {
+    position:fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.confirmation {
+    display: none;
+    margin-top: 1rem;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#statusMessage {
+    text-align: center;
+    color: var(--error-color);
+    background: rgb(255, 255, 255);
+    padding: 0.5rem;
+    width: 350px;
+    max-width: 800px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#loading {
+    display: none;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+#loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    .button-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    }
+
+    a {
+        text-decoration: none;
+        padding: 10px 20px;
+        background-color: rgb(9, 168, 217);
+        color: var(--text-color);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    a:hover {
+        background-color: #172e69;
+        transform: translateY(-5px);
+    }
+
+    /* Gaya untuk section pengumuman */
+    .announcement-index {
+        width: auto;
+        max-width: 500px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        margin-top: 100px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+        color: var(--text-color);
+    }
+    .announcement-section {
+        width: auto;
+        max-width: 500px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        margin-top: 100px;
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+        color: var(--text-color);
+    }
+
+    .announcement-section h3 {
+        color: var(--text-color);
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    #announcementText {
+        font-size: 1rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+
+    .admin-button {
+        background-color: #ee9d15;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .admin-button:hover {
+        background-color: #e15f0e;
+        transform: translateY(-2px);
+    }
+
+    /* Tombol Melayang */
+    .floating-button {
+        position: fixed;
+        background-color: #e15f0e;
+        bottom: 50px;
+        right: 20px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 0.8rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 1000;
+    }
+
+    .floating-button:hover {
+        background-color: #e15f0e;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Menu yang muncul saat tombol diklik */
+    .floating-menu {
+        position: fixed;
+        bottom: 80px; /* Jarak dari tombol melayang */
+        right: 20px;
+        display: none; /* Sembunyikan menu secara default */
+        flex-direction: column;
+        gap: 10px;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 10px;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+    }
+
+    .floating-menu-item {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        font-size: 0.8rem;
+        text-decoration: none;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .floating-menu-item:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* Tampilkan menu saat tombol diklik */
+    .floating-menu.active {
+        display: flex;
+    }
+
+    /* Gaya untuk halaman about */
+    .about-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: var(--background-color);
+        backdrop-filter: blur(10px);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-top: 100px;
+        animation: fadeIn 1s ease-in-out;
+        color: var(--text-color);
+    }
+
+    .about-container h1 {
+        color: var(--text-color);
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 2rem;
+    }
+
+    .about-container h2 {
+        color: var(--text-color);
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+    }
+
+    .about-container h3 {
+        color: var(--text-color);
+        margin-top: 15px;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    .about-container p {
+        color: var(--text-color);
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+    .about-container ul {
+        list-style-type: disc;
+        margin-left: 20px;
+        color: var(--text-color);
+    }
+
+    .about-container ul li {
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 0.7rem;
+        font-size: 15px;
+        background: rgba(173, 173, 173, 0.468);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+    
+    .back-button:hover {
+        background: var(--button-hover-color);
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-5px);
+    }
+
+    /* Responsif untuk perangkat kecil */
+    @media (max-width: 768px) {
+        .about-container {
+            padding: 15px;
+            margin-top: 80px;
+        }
+
+        .about-container h1 {
+            font-size: 1.8rem;
+        }
+
+        .about-container h2 {
+            font-size: 1.3rem;
+        }
+
+        .about-container h3 {
+            font-size: 1.1rem;
+        }
+
+        .about-container p, .about-container ul li {
+            font-size: 0.9rem;
+        }
+
+        .back-button {
+            font-size: 0.9rem;
+            padding: 8px 16px;
+        }
+    }
+    /* Gaya untuk halaman laporan */
+        #reportContainer {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            max-width: 2000px;
+        }
+
+        iframe {
+            border: none !important;
+            background: transparent !important;
+            width: 2000px;
+            max-width: 100%;
+            align-items: center;
+        }
+        /* Gaya untuk halaman laporan */
+        .laporan-container {
+            display: none; /*Sembunyikan container secara default*/
+            max-width: 1100px;
+            margin-left: 0 auto;
+            padding: 20px;
+            background: var(--background-color);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 100px;
+            animation: fadeIn 1s ease-in-out;
+            color: var(--text-color);
+        }
+
+        .laporan-container-awal {
+            text-align:center;
+            max-width: 1100px;
+            margin-left: 0 auto;
+            padding: 20px;
+            background: var(--background-color);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 100px;
+            animation: fadeIn 1s ease-in-out;
+            color: var(--text-color);
+        }
+
+        .laporan-container h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .laporan-container h2 {
+            color: var(--text-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .laporan-container h3 {
+            color: var(--text-color);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .laporan-container p {
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .laporan-container ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            color: var(--text-color);
+        }
+
+        .laporan-container ul li {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 0.7rem;
+            font-size: 15px;
+            background: rgba(173, 173, 173, 0.468);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .back-button:hover {
+            background: var(--button-hover-color);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        /* Responsif untuk perangkat kecil */
+        @media (max-width: 768px) {
+            .laporan-container {
+                padding: 15px;
+                margin-top: 80px;
+            }
+
+            .laporan-container h1 {
+                font-size: 1.8rem;
+            }
+
+            .laporan-container h2 {
+                font-size: 1.3rem;
+            }
+
+            .laporan-container h3 {
+                font-size: 1.1rem;
+            }
+
+            .laporan-container p, .laporan-container ul li {
+                font-size: 0.9rem;
+            }
+
+            .back-button {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+        }
+    /* Styling untuk loading screen */
+        .loading-screen {
+            position: fixed;
+            top: 100px; /* Mulai di bawah curve */
+            left: 0;
+            width: 100%;
+            height: calc(100% - 100px); /* Tinggi layar dikurangi tinggi curve */
+            background: var(--background-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Ubah ke flex-start agar konten bisa di-scroll */
+            z-index: 50; /* Di bawah curve */
+            overflow-y: auto; /* Aktifkan scrolling vertikal */
+        }
+
+        .landing-pegawai-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 1rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 2rem ; /* Tambahkan margin atas dan bawah */
+            margin-bottom: 3rem;
+            margin-top: 120px;
+        }
+
+        .loading-content h1 {
+            font-size: 1.5rem; /* Ukuran font diperkecil */
+            margin-bottom: 0.5rem; /* Margin diperkecil */
+            color: var(--text-color);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Efek shadow pada teks */
+        }
+
+        .loading-content p {
+            font-size: 0.9rem; /* Ukuran font diperkecil */
+            color: var(--text-color);
+            margin-bottom: 0.7rem; /* Margin diperkecil */
+            line-height: 1.5; /* Jarak antar baris lebih rapat */
+        }
+        /* Gaya untuk landing page */
+        .landing-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .landing-button-container h3 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .landing-button {
+            padding: 1rem;
+            font-size: 16px;
+            background: rgba(173, 173, 173, 0.468);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin:  0 auto;
+        }
+
+        .landing-button:hover {
+            background: var(--button-hover-color);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .landing-button i {
+            font-size: 20px;
+        }
+
+        /* Responsif untuk perangkat kecil */
+        @media (max-width: 768px) {
+            .landing-button-container {
+                max-width: 100%;
+                padding: 1rem;
+            }
+
+            .landing-button {
+                font-size: 14px;
+                padding: 0.8rem;
+            }
+
+            .landing-button-container h3 {
+                font-size: 1.2rem;
+            }
+        }
+        .time-check-message {
+/*            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);*/
+            max-width: 600px;
+            width: 90%;
+            margin-top: 100px;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+            text-align: center;
+        }
+        .landing-content p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            max-width: 500px; /* Lebar maksimum deskripsi */
+            margin: 1rem auto 1rem; /* Pusatkan dan beri jarak bawah */
+        }        
+        .landing-content h1 {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            line-height: 1.6;
+            max-width: 500px; /* Lebar maksimum deskripsi */
+            margin: 6rem auto 1rem; /* Pusatkan dan beri jarak bawah */
+        }
+        /* Tambahkan CSS untuk banner notifikasi */
+        #installBanner {
+            position: fixed;
+            margin-bottom: 20px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #47974a;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+        }
+        #installBanner button {
+            background-color: #ffffff;
+            color: #47974a;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
