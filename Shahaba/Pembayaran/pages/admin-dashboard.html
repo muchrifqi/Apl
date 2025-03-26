@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pencetak Bukti Transaksi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/transaction-admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <!-- Header Curve -->
+    <div class="curve">
+        <h1>Shahaba</h1>
+        <h2>Admin Dashboard - Pencetak Bukti Transaksi</h2>
+    </div>
+
+    <!-- Floating Menu Button -->
+    <button class="floating-button" id="floatingMenuButton">
+        <i class="fas fa-bars"></i> Menu
+    </button>
+
+    <!-- Floating Menu -->
+    <div class="floating-menu" id="floatingMenu">
+        <a href="#" class="floating-menu-item" id="logoutButton">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <a href="#" class="floating-menu-item">
+            <i class="fas fa-cog"></i> Pengaturan
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Dashboard Admin</h1>
+            <div class="dashboard-info">
+                <span><i class="fas fa-user"></i> Admin</span>
+                <span><i class="fas fa-calendar-day"></i> <span id="currentDate"></span></span>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(46, 204, 113, 0.2);">
+                    <i class="fas fa-check-circle" style="color: #2ecc71;"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Transaksi Sukses</h3>
+                    <p id="successTransactions">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(231, 76, 60, 0.2);">
+                    <i class="fas fa-times-circle" style="color: #e74c3c;"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Transaksi Gagal</h3>
+                    <p id="failedTransactions">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon" style="background-color: rgba(52, 152, 219, 0.2);">
+                    <i class="fas fa-spinner" style="color: #3498db;"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Dalam Proses</h3>
+                    <p id="pendingTransactions">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Actions -->
+        <div class="action-container">
+            <h2><i class="fas fa-cogs"></i> Aksi Cepat</h2>
+            <div class="action-buttons">
+                <button class="action-button" id="printReceiptBtn">
+                    <i class="fas fa-receipt"></i> Cetak Bukti Transaksi
+                </button>
+                <button class="action-button" id="sendReceiptBtn">
+                    <i class="fas fa-paper-plane"></i> Kirim via WhatsApp
+                </button>
+                <button class="action-button" id="emailReceiptBtn">
+                    <i class="fas fa-envelope"></i> Kirim via Email
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transactions-container">
+            <h2><i class="fas fa-history"></i> Transaksi Terakhir</h2>
+            <div class="transactions-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID Transaksi</th>
+                            <th>Nama Siswa</th>
+                            <th>Tanggal</th>
+                            <th>Jumlah</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsList">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        &copy; 2025 Shahaba SD & Prasekolah
+    </footer>
+
+    <script>
+        // Cek session login
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!sessionStorage.getItem('adminLoggedIn')) {
+                window.location.href = "admin-login.html";
+            }
+
+            // Update tanggal
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', options);
+
+            // Floating menu toggle
+            const menuButton = document.getElementById('floatingMenuButton');
+            const floatingMenu = document.getElementById('floatingMenu');
+
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                floatingMenu.classList.toggle('active');
+            });
+
+            document.addEventListener('click', () => {
+                floatingMenu.classList.remove('active');
+            });
+
+            // Logout function
+            document.getElementById('logoutButton').addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Logout',
+                    text: 'Anda yakin ingin logout?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3693cc',
+                    cancelButtonColor: '#e74c3c',
+                    confirmButtonText: 'Ya, Logout',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sessionStorage.removeItem('adminLoggedIn');
+                        window.location.href = "admin-login.html";
+                    }
+                });
+            });
+
+            // Mock data untuk demo
+            document.getElementById('successTransactions').textContent = '24';
+            document.getElementById('failedTransactions').textContent = '3';
+            document.getElementById('pendingTransactions').textContent = '5';
+
+            // Mock transactions data
+            const transactions = [
+                { id: 'TRX-2023-001', name: 'Ahmad Fauzi', date: '25/03/2023', amount: 'Rp 1.250.000', status: 'Sukses' },
+                { id: 'TRX-2023-002', name: 'Budi Santoso', date: '24/03/2023', amount: 'Rp 750.000', status: 'Sukses' },
+                { id: 'TRX-2023-003', name: 'Citra Dewi', date: '24/03/2023', amount: 'Rp 500.000', status: 'Pending' },
+                { id: 'TRX-2023-004', name: 'Dian Pratama', date: '23/03/2023', amount: 'Rp 1.000.000', status: 'Gagal' },
+                { id: 'TRX-2023-005', name: 'Eka Wulandari', date: '22/03/2023', amount: 'Rp 1.500.000', status: 'Sukses' }
+            ];
+
+            const tbody = document.getElementById('transactionsList');
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                
+                let statusClass = '';
+                if (transaction.status === 'Sukses') statusClass = 'status-success';
+                else if (transaction.status === 'Gagal') statusClass = 'status-failed';
+                else statusClass = 'status-pending';
+                
+                row.innerHTML = `
+                    <td>${transaction.id}</td>
+                    <td>${transaction.name}</td>
+                    <td>${transaction.date}</td>
+                    <td>${transaction.amount}</td>
+                    <td><span class="status-badge ${statusClass}">${transaction.status}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Button actions
+            document.getElementById('printReceiptBtn').addEventListener('click', () => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Cetak Bukti Transaksi',
+                    text: 'Fitur cetak bukti transaksi akan dibuka',
+                    confirmButtonColor: '#3693cc'
+                });
+            });
+
+            document.getElementById('sendReceiptBtn').addEventListener('click', () => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Kirim via WhatsApp',
+                    text: 'Fitur pengiriman via WhatsApp akan dibuka',
+                    confirmButtonColor: '#3693cc'
+                });
+            });
+
+            document.getElementById('emailReceiptBtn').addEventListener('click', () => {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Kirim via Email',
+                    text: 'Fitur pengiriman via email akan dibuka',
+                    confirmButtonColor: '#3693cc'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
