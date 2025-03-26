@@ -591,3 +591,163 @@ td {
         right: 20px;
     }
 }
+/* ================ TRANSACTION FORM STYLES ================ */
+.transaction-form-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--input-border);
+  box-shadow: var(--box-shadow);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px; /* Lebar maksimum diperkecil */
+  padding: 1.5rem;
+  box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+}
+
+.transaction-form-title {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.transaction-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.transaction-form-label {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transaction-form-input,
+.transaction-form-select {
+  width: 90%;
+  padding: 12px 15px;
+  border: 2px solid var(--input-border);
+  border-radius: var(--border-radius);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.transaction-form-input:focus,
+.transaction-form-select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(225, 95, 14, 0.3);
+}
+
+.transaction-form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.transaction-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+}
+
+.transaction-form-button {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.transaction-form-button:hover {
+  background: #d35400;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-form-container {
+      padding: 1.5rem;
+  }
+  
+  .transaction-form-title {
+      font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .transaction-form-container {
+      padding: 1.2rem;
+  }
+  
+  .transaction-form-input,
+  .transaction-form-select {
+      padding: 10px 12px;
+  }
+}
+.amount-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-prefix {
+  position: absolute;
+  left: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.amount-input {
+  padding-left: 40px !important; /* Ruang untuk prefix Rp */
+  letter-spacing: 0.5px;
+}
+
+/* Perbaikan responsif */
+@media (max-width: 480px) {
+  .transaction-form-container {
+      padding: 1rem;
+  }
+  
+  .transaction-form-input, 
+  .transaction-form-select {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+  }
+  
+  .currency-prefix {
+      left: 12px;
+      font-size: 0.9rem;
+  }
+  
+  .amount-input {
+      padding-left: 35px !important;
+  }
+}
