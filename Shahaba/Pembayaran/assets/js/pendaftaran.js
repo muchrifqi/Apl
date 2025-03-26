@@ -181,7 +181,7 @@ async function collectFormData() {
 
 async function sendToGoogleAppsScript(formData) {
     // Ganti dengan URL deployment Google Apps Script Anda
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbw0VFQEZaUEQytPmAshRncZ_hiAxktGqo64z0jzzpMop3GBzY1yKQSthEP97jkSO90/exec';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycby9kP7E6W44eW09Ywggl2STCs9hSccQxNeYUpBCyDg9AmP4sE9sOzFVVLlsAYlHvowT/exec';
     
     try {
         const response = await fetch(scriptUrl, {
