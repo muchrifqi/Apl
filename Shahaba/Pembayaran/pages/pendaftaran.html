@@ -24,11 +24,11 @@
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="nama_lengkap">Nama Lengkap*</label>
-                        <input type="text" id="nama_lengkap" required>
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" required>
                     </div>
                     <div class="form-group half-width">
                         <label for="jenis_kelamin">Jenis Kelamin*</label>
-                        <select id="jenis_kelamin" required>
+                        <select id="jenis_kelamin" name="jenis_kelamin" required>
                             <option value="">Pilih</option>
                             <option value="L">Laki-laki</option>
                             <option value="P">Perempuan</option>
@@ -39,17 +39,17 @@
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="tempat_lahir">Tempat Lahir*</label>
-                        <input type="text" id="tempat_lahir" required>
+                        <input type="text" id="tempat_lahir" name="tempat_lahir" required>
                     </div>
                     <div class="form-group half-width">
                         <label for="tanggal_lahir">Tanggal Lahir*</label>
-                        <input type="date" id="tanggal_lahir" required>
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="alamat">Alamat Lengkap*</label>
-                    <textarea id="alamat" rows="3" required></textarea>
+                    <textarea id="alamat" name="alamat" rows="3" required></textarea>
                 </div>
             </fieldset>
 
@@ -60,33 +60,33 @@
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="nama_ayah">Nama Ayah*</label>
-                        <input type="text" id="nama_ayah" required>
+                        <input type="text" id="nama_ayah" name="nama_ayah" required>
                     </div>
                     <div class="form-group half-width">
                         <label for="pekerjaan_ayah">Pekerjaan Ayah</label>
-                        <input type="text" id="pekerjaan_ayah">
+                        <input type="text" id="pekerjaan_ayah" name="pekerjaan_ayah">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="nama_ibu">Nama Ibu*</label>
-                        <input type="text" id="nama_ibu" required>
+                        <input type="text" id="nama_ibu" name="nama_ibu" required>
                     </div>
                     <div class="form-group half-width">
                         <label for="pekerjaan_ibu">Pekerjaan Ibu</label>
-                        <input type="text" id="pekerjaan_ibu">
+                        <input type="text" id="pekerjaan_ibu" name="pekerjaan_ibu">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="no_hp">No. HP Orang Tua*</label>
-                        <input type="tel" id="no_hp" required>
+                        <input type="tel" id="no_hp" name="no_hp" required>
                     </div>
                     <div class="form-group half-width">
                         <label for="email">Email Orang Tua</label>
-                        <input type="email" id="email">
+                        <input type="email" id="email" name="email">
                     </div>
                 </div>
             </fieldset>
@@ -98,22 +98,26 @@
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="akta_kelahiran">Akta Kelahiran*</label>
-                        <input type="file" id="akta_kelahiran" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" id="akta_kelahiran" name="akta_kelahiran" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small class="file-info">Format: PDF/JPG/PNG (Maks. 2MB)</small>
                     </div>
                     <div class="form-group half-width">
                         <label for="ktp_ortu">KTP Orang Tua*</label>
-                        <input type="file" id="ktp_ortu" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" id="ktp_ortu" name="ktp_ortu" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small class="file-info">Format: PDF/JPG/PNG (Maks. 2MB)</small>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="kk">Kartu Keluarga*</label>
-                        <input type="file" id="kk" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <input type="file" id="kk" name="kk" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <small class="file-info">Format: PDF/JPG/PNG (Maks. 2MB)</small>
                     </div>
                     <div class="form-group half-width">
                         <label for="foto">Foto 3x4</label>
-                        <input type="file" id="foto" accept=".jpg,.jpeg,.png">
+                        <input type="file" id="foto" name="foto" accept=".jpg,.jpeg,.png">
+                        <small class="file-info">Format: JPG/PNG (Maks. 2MB)</small>
                     </div>
                 </div>
             </fieldset>
@@ -128,20 +132,8 @@
             </div>
         </form>
     </div>
-    <div id="loading" style="display: none;">
-        <i class="fas fa-spinner fa-spin"></i> Memproses...
-    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../assets/js/pendaftaran.js"></script>
-    <!-- Tambahkan ini sebelum penutup </body> -->
-<script>
-    // Pastikan SweetAlert terload
-    window.addEventListener('load', () => {
-        if(typeof Swal === 'undefined') {
-            alert('Error: SweetAlert2 tidak terload!');
-            document.querySelectorAll('button').forEach(btn => btn.disabled = true);
-        }
-    });
-</script>
 </body>
 </html>
