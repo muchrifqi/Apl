@@ -276,3 +276,58 @@
     font-size: 0.8em;
     margin-left: 5px;
 }
+/* Style untuk daftar saudara kandung */
+.sibling-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 5px 0;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.sibling-item button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.sibling-item button:hover {
+    background-color: #45a049;
+}
+
+#suggestedStudents {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Style untuk selected students */
+.multi-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.student-tag {
+    background-color: #e3f2fd;
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.student-tag button {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+}
