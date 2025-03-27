@@ -1,102 +1,121 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Transaksi - Shahaba</title>
-    <link rel="stylesheet" href="../assets/css/transaction-admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <div class="curve">
-        <h1>Shahaba</h1>
-        <h2>Input Transaksi Baru</h2>
-    </div>
+async function simpanTransaksi() {
+  // Kumpulkan data formulir
+  const studentId = document.getElementById('studentId').value;
+  const studentName = document.getElementById('studentName').value;
+  let amount = document.getElementById('amount').value;
 
-    <div class="dashboard-container">
-        <div class="transaction-form-container">
-            <h1 class="transaction-form-title"><i class="fas fa-file-invoice-dollar"></i> Form Transaksi Baru</h1>
-            <form id="transactionForm" class="transaction-form">
-                <!-- Tanggal Pembayaran (Manual Input) -->
-                <div class="transaction-form-group">
-                    <label for="paymentDate" class="transaction-form-label">
-                        <i class="fas fa-calendar-alt"></i> Tanggal Pembayaran
-                    </label>
-                    <input type="date" id="paymentDate" class="transaction-form-input" required>
-                </div>
+  // Bersihkan nilai amount (hapus titik pemisah ribuan)
+  amount = amount.replace(/\./g, '');
 
-                <!-- Tanggal Bukti Pembayaran (Otomatis, Tersembunyi) -->
-                <input type="hidden" id="proofDate" name="proofDate">
+  // Kumpulkan semua jenis pembayaran
+  const paymentDetails = Array.from(document.querySelectorAll('.payment-type-item')).map(item => ({
+      type: item.querySelector('select').value,
+      amount: item.querySelector('input').value.replace(/\./g, '') // Hapus titik pemisah ribuan
+  }));
 
-                <!-- Tanggal Input -->
-                <div class="transaction-form-group">
-                    <label for="transactionDate" class="transaction-form-label">
-                        <i class="fas fa-calendar-alt"></i> Tanggal Input
-                    </label>
-                    <input type="date" id="transactionDate" class="transaction-form-input" required>
-                </div>
-                
-                <!-- Nama Siswa & ID -->
-                <div class="transaction-form-group">
-                    <label for="studentInfo" class="transaction-form-label">
-                        <i class="fas fa-user-graduate"></i> Nama Siswa & ID
-                    </label>
-                    <div class="student-info-wrapper">
-                        <input type="text" id="studentInfo" class="transaction-form-input" list="studentList" required maxlength="50" placeholder="Nama Siswa">
-                        <input type="text" id="studentId" class="transaction-form-input" readonly placeholder="ID Siswa">
-                    </div>
-                    <datalist id="studentList">
-                        <!-- Daftar nama siswa akan diisi secara dinamis -->
-                    </datalist>
-                </div>
+  // Validasi: Pastikan semua input terisi
+  if (!studentId || !studentName || !amount || paymentDetails.some(detail => !detail.type || !detail.amount)) {
+      alert('Harap lengkapi semua data!');
+      return;
+  }
 
-                <!-- Nama Saudara (Opsional) -->
-                <div class="transaction-form-group">
-                    <label for="siblingName" class="transaction-form-label">
-                        <i class="fas fa-users"></i> Nama Saudara (Opsional)
-                    </label>
-                    <input type="text" id="siblingName" class="transaction-form-input" list="siblingList" placeholder="Nama Saudara">
-                    <datalist id="siblingList">
-                        <!-- Daftar nama saudara akan diisi secara dinamis -->
-                    </datalist>
-                </div>
+  // Data yang akan dikirim ke server
+  const data = {
+      studentId,
+      studentName,
+      amount: parseInt(amount), // Konversi ke integer
+      paymentDetails
+  };
 
-                <!-- Jenis Pembayaran -->
-                <div class="transaction-form-group">
-                    <label for="paymentTypesContainer" class="transaction-form-label">
-                        <i class="fas fa-receipt"></i> Jenis Pembayaran
-                    </label>
-                    <div id="paymentTypesContainer">
-                        <!-- Jenis pembayaran akan ditambahkan dinamis -->
-                    </div>
-                    <button type="button" id="addPaymentType" class="add-payment-btn">
-                        <i class="fas fa-plus"></i> Tambah Jenis Pembayaran
-                    </button>
-                </div>
+  try {
+      // Kirim data ke server
+      const response = await fetch(
+          'https://script.google.com/macros/s/AKfycbz4Unnmz0lqoDQYO34so4diAo97V0irlhoYSgfDbr2QFwc4gb0XzCRJJ62gsFyy1i89/exec',
+          {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+          }
+      );
 
-                <!-- Total (Kalkulasi Otomatis) -->
-                <div class="transaction-form-group">
-                    <label for="totalAmount" class="transaction-form-label">
-                        <i class="fas fa-money-bill-wave"></i> Total (Rp)
-                    </label>
-                    <div class="amount-input-wrapper">
-                        <span class="currency-prefix">Rp</span>
-                        <input type="text" id="totalAmount" class="transaction-form-input amount-input" readonly placeholder="0">
-                    </div>
-                </div>
+      // Periksa respons server
+      if (response.ok) {
+          alert('Data tersimpan!');
+          document.getElementById('transactionForm').reset();
+          document.getElementById('paymentTypesContainer').innerHTML = ''; // Kosongkan daftar pembayaran
+      } else {
+          throw new Error('Gagal menyimpan data');
+      }
+  } catch (error) {
+      alert('Error: Cek console');
+      console.error(error);
+  }
+}
+let studentCounter = 1; // Untuk melacak jumlah siswa
 
-                <!-- Tombol Simpan -->
-                <button type="submit" class="transaction-form-button">
-                    <i class="fas fa-save"></i> Simpan Transaksi
-                </button>
-            </form>
+document.getElementById('addStudentBtn').addEventListener('click', function () {
+    studentCounter++;
+    const container = document.getElementById('studentListContainer');
+    const newStudent = document.createElement('div');
+    newStudent.className = 'student-item';
+    newStudent.innerHTML = `
+        <h3 class="student-item-title"><i class="fas fa-user-graduate"></i> Siswa ${studentCounter}</h3>
+        <div class="transaction-form-group">
+            <label for="studentName_${studentCounter}" class="transaction-form-label">
+                <i class="fas fa-user-graduate"></i> Nama Siswa
+            </label>
+            <input type="text" id="studentName_${studentCounter}" class="transaction-form-input student-name" list="studentList" required maxlength="50" placeholder="Nama Siswa">
         </div>
-    </div>
-    <footer class="footer">
-        &copy; 2025 Shahaba SD & Prasekolah
-    </footer>
+        <div class="transaction-form-group">
+            <label for="studentId_${studentCounter}" class="transaction-form-label">
+                <i class="fas fa-id-card"></i> ID Siswa
+            </label>
+            <input type="text" id="studentId_${studentCounter}" class="transaction-form-input student-id" readonly placeholder="ID Siswa">
+        </div>
+        <div class="transaction-form-group">
+            <label for="paymentTypesContainer_${studentCounter}" class="transaction-form-label">
+                <i class="fas fa-receipt"></i> Jenis Pembayaran
+            </label>
+            <div class="payment-types-container" id="paymentTypesContainer_${studentCounter}">
+                <!-- Jenis pembayaran akan ditambahkan dinamis -->
+            </div>
+            <button type="button" class="add-payment-btn add-payment-type" data-student="${studentCounter}">
+                <i class="fas fa-plus"></i> Tambah Jenis Pembayaran
+            </button>
+        </div>
+        <button type="button" class="remove-student-btn" onclick="this.parentElement.remove()">
+            <i class="fas fa-times"></i> Hapus Siswa
+        </button>
+    `;
+    container.appendChild(newStudent);
 
-    <script>
+    // Tambahkan event listener untuk autocomplete nama siswa
+    setupStudentAutocomplete();
+});
+// Fungsi untuk mengatur autocomplete nama siswa
+function setupStudentAutocomplete() {
+  document.querySelectorAll('.student-name').forEach(input => {
+      input.addEventListener('input', function () {
+          const selectedOption = Array.from(studentList.options).find(option => option.value === this.value);
+          if (selectedOption) {
+              const studentIdInput = this.closest('.student-item').querySelector('.student-id');
+              studentIdInput.value = selectedOption.getAttribute('data-id');
+          }
+      });
+  });
+}
+
+// Panggil fungsi saat halaman dimuat
+document.addEventListener('DOMContentLoaded', function () {
+  setupStudentAutocomplete();
+});
+
+ini js yg terpisah
+
+
+<script>
         // Data dummy untuk daftar siswa
         const studentData = [
             { id: "SIS-001", name: "Ahmad", parentId: "PARENT-001" },
@@ -241,5 +260,7 @@
         // Isi tanggal default hari ini
         document.getElementById('transactionDate').valueAsDate = new Date();
     </script>
-</body>
-</html>
+
+ini js yg di html.
+
+Gabung keduanya dan pastikan scriptnya bekerja

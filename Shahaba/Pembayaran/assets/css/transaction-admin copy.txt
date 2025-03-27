@@ -1,0 +1,998 @@
+/* ================ VARIABLES ================ */
+:root {
+    /* Warna utama */
+    --primary-color: #172e69;
+    --secondary-color: #2b2b2b;
+    --accent-color: #e15f0e;
+    --background-gradient: linear-gradient(-45deg, #3693cc, #172e69);
+    --text-color: white;
+    
+    /* Warna status */
+    --error-color: #b82f25;
+    --success-color: #006c04;
+    --warning-color: #ee9d15;
+    
+    /* Warna komponen */
+    --button-hover-color: #1e7637;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(255, 255, 255, 0.2);
+    --card-bg: rgba(255, 255, 255, 0.1);
+    
+    /* Ukuran */
+    --border-radius: 25px;
+    --box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s ease;
+  }
+  
+  /* ================ BASE STYLES ================ */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-gradient);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* ================ HEADER CURVE ================ */
+  .curve {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: white;
+    border-radius: 0 0 50% 50%;
+    transform: scaleX(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  
+  .curve h1 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .curve h2 {
+    color: var(--secondary-color);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: normal;
+    text-align: center;
+  }
+  
+  /* ================ LANDING CONTENT WRAPPER ================ */
+  .landing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    margin-top: 120px;
+    margin-bottom: 80px;
+    box-sizing: border-box;
+  }
+  
+  /* ================ ADMIN LOGIN CONTAINER ================ */
+  .admin-login-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--input-border);
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .admin-login-container h1 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  /* ================ FORM ELEMENTS ================ */
+  .admin-form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+  
+  .admin-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  
+  .admin-form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--input-border);
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: var(--transition);
+    box-sizing: border-box;
+  }
+  
+  .admin-form-group input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(225, 95, 14, 0.3);
+  }
+  
+  .admin-form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  /* Password input with toggle */
+  .password-input-wrapper {
+    position: relative;
+  }
+  
+  .password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    transition: var(--transition);
+  }
+  
+  .password-toggle:hover {
+    color: var(--accent-color);
+  }
+  
+  /* ================ BUTTON STYLES ================ */
+  .admin-login-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: rgba(173, 173, 173, 0.468);
+    border: 2px solid var(--input-border);
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 1rem;
+  }
+  
+  .admin-login-button:hover {
+    background: var(--button-hover-color);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+  }
+  
+  /* ================ FOOTER ================ */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+  }
+  
+  /* ================ RESPONSIVE DESIGN ================ */
+  @media (max-width: 768px) {
+    .landing-content {
+      margin-top: 100px;
+      padding: 15px;
+    }
+    
+    .admin-login-container {
+      padding: 1.5rem;
+    }
+    
+    .curve h1 {
+      font-size: 1.8rem;
+    }
+    
+    .curve h2 {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .landing-content {
+      margin-top: 90px;
+    }
+    
+    .admin-login-container {
+      padding: 1.5rem 1rem;
+    }
+    
+    .admin-login-container h1 {
+      font-size: 1.3rem;
+    }
+    
+    .admin-form-group input {
+      padding: 10px 12px;
+    }
+    
+    .admin-login-button {
+      padding: 10px;
+      font-size: 15px;
+    }
+  }
+  
+  /* ================ UTILITY CLASSES ================ */
+  .hidden {
+    display: none !important;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-1 { margin-top: 0.5rem; }
+  .mt-2 { margin-top: 1rem; }
+  .mt-3 { margin-top: 1.5rem; }
+  .mb-1 { margin-bottom: 0.5rem; }
+  .mb-2 { margin-bottom: 1rem; }
+  .mb-3 { margin-bottom: 1.5rem; }
+
+
+  /* ================ DASHBOARD STYLES ================ */
+.dashboard-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 120px auto 80px;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dashboard-header h1 {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard-info {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.dashboard-info span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Stats Cards */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid var(--input-border);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.stat-info h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: normal;
+}
+
+.stat-info p {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+/* Action Container */
+.action-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--input-border);
+}
+
+.action-container h2 {
+    color: var(--text-color);
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.action-button {
+    padding: 1rem;
+    background: rgba(173, 173, 173, 0.468);
+    border: 2px solid var(--input-border);
+    color: var(--text-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.action-button:hover {
+    background: var(--button-hover-color);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+/* Transactions Table */
+.transactions-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border: 1px solid var(--input-border);
+    margin-bottom: 2rem;
+}
+
+.transactions-container h2 {
+    color: var(--text-color);
+    font-size: 1.3rem;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.transactions-table {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+td {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-success {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+}
+
+.status-failed {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+.status-pending {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+}
+
+/* Floating Menu */
+.floating-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.floating-button:hover {
+    background-color: #d35400;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.floating-menu {
+    position: fixed;
+    bottom: 80px;
+    right: 30px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    min-width: 180px;
+}
+
+.floating-menu.active {
+    display: flex;
+}
+
+.floating-menu-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: calc(var(--border-radius) - 5px);
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.floating-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .stats-container {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        margin-top: 100px;
+    }
+    
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .dashboard-info {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .floating-button {
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .floating-menu {
+        bottom: 70px;
+        right: 20px;
+    }
+}
+/* ================ TRANSACTION FORM STYLES ================ */
+.transaction-form-container {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--input-border);
+  box-shadow: var(--box-shadow);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px; /* Lebar maksimum diperkecil */
+  padding: 1.5rem;
+  box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+}
+
+.transaction-form-title {
+  color: var(--text-color);
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transaction-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.transaction-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.transaction-form-label {
+  color: var(--text-color);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transaction-form-input,
+.transaction-form-select {
+  width: auto;
+  padding: 12px 15px;
+  border: 2px solid var(--input-border);
+  border-radius: var(--border-radius);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.transaction-form-input:focus,
+.transaction-form-select:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(225, 95, 14, 0.3);
+}
+
+.transaction-form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.transaction-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+}
+
+.transaction-form-button {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+
+.transaction-form-button:hover {
+  background: #d35400;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-form-container {
+      padding: 1.5rem;
+  }
+  
+  .transaction-form-title {
+      font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .transaction-form-container {
+      padding: 1.2rem;
+  }
+  
+  .transaction-form-input,
+  .transaction-form-select {
+      padding: 10px 12px;
+  }
+}
+.amount-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-prefix {
+  position: absolute;
+  left: 15px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  z-index: 1;
+}
+
+.amount-input {
+  padding-left: 40px !important; /* Ruang untuk prefix Rp */
+  letter-spacing: 0.5px;
+  width: 90%;
+}
+
+/* Perbaikan responsif */
+@media (max-width: 480px) {
+  .transaction-form-container {
+      padding: 1rem;
+  }
+  
+  .transaction-form-input, 
+  .transaction-form-select {
+      padding: 10px 12px;
+      font-size: 0.9rem;
+  }
+  
+  .currency-prefix {
+      left: 12px;
+      font-size: 0.9rem;
+  }
+  
+  .amount-input {
+      padding-left: 35px !important;
+  }
+}
+/* Styling untuk container jenis pembayaran */
+#paymentTypesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Jarak antar item */
+  margin-bottom: 20px;
+}
+
+/* Styling untuk setiap item jenis pembayaran */
+.payment-type-item {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 10px; /* Jarak antar elemen dalam item */
+  padding: 10px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.payment-type-item:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Efek hover */
+}
+
+/* Styling untuk select input */
+.payment-type-item select {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: var(--transition);
+}
+.payment-type-item select option {
+  background-color: #172e69; /* Warna biru gelap (sesuai --primary-color) */
+  color: white; /* Warna teks putih */
+}
+
+.payment-type-item select:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  
+}
+
+/* Styling untuk input jumlah */
+.payment-type-item input[type="number"] {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  text-align: right;
+  transition: var(--transition);
+}
+.custom-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+/* Styling untuk placeholder */
+.amount-input::placeholder {
+  color: rgba(255, 255, 255, 0.6); /* Warna placeholder lebih redup */
+  font-size: 14px; /* Ukuran font */
+}
+
+.payment-type-item input[type="number"]:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Styling untuk tombol hapus item */
+.remove-payment-btn {
+  background-color: var(--error-color);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.remove-payment-btn:hover {
+  background-color: #b82f25cc; /* Efek hover lebih redup */
+}
+
+.remove-payment-btn i {
+  color: white;
+  font-size: 14px;
+}
+
+/* Styling untuk tombol "Tambah Jenis Pembayaran" */
+.add-payment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+}
+
+.add-payment-btn:hover {
+  background-color: #e15f0ecc; /* Efek hover lebih redup */
+}
+
+.add-payment-btn i {
+  font-size: 16px;
+}
+/* Responsive Design */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .dashboard-container {
+      max-width: 800px; /* Lebar maksimal untuk tablet */
+      padding: 15px;
+  }
+
+  .transaction-form-container {
+      padding: 15px;
+  }
+
+  .transaction-form-title {
+      font-size: 1.5rem;
+  }
+
+  .add-payment-btn {
+      font-size: 12px;
+      padding: 8px 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dashboard-container {
+      max-width: 100%; /* Full width untuk mobile */
+      padding: 10px;
+  }
+
+  .transaction-form-container {
+      padding: 10px;
+  }
+
+  .transaction-form-title {
+      font-size: 1.2rem;
+  }
+
+  .transaction-form-group {
+      margin-bottom: 10px;
+  }
+
+  .payment-type-item {
+      flex-direction: column; /* Tumpuk elemen secara vertikal */
+      gap: 5px;
+  }
+
+  .payment-type-item select,
+  .payment-type-item input[type="number"] {
+      width: 100%; /* Input dan select menjadi full width */
+  }
+
+  .add-payment-btn {
+      font-size: 12px;
+      padding: 8px 12px;
+      width: 100%; /* Tombol menjadi full width */
+  }
+}
+
+/* Extra Small Devices (Ponsel kecil) */
+@media (max-width: 480px) {
+  body {
+      font-size: 14px; /* Ukuran font lebih kecil */
+  }
+
+  .curve h1 {
+      font-size: 1.5rem;
+  }
+
+  .curve h2 {
+      font-size: 1rem;
+  }
+
+  .transaction-form-title {
+      font-size: 1rem;
+  }
+
+  .transaction-form-group label {
+      font-size: 12px;
+  }
+
+  .transaction-form-input,
+  .transaction-form-select {
+      font-size: 12px;
+      padding: 6px;
+  }
+
+  .add-payment-btn {
+      font-size: 10px;
+      padding: 6px 10px;
+  }
+}
+.student-info-wrapper {
+  display: flex;
+  gap: 10px; /* Jarak antara input nama siswa dan ID siswa */
+}
+
+#studentName, #studentId {
+  flex: 1; /* Membuat kedua input memiliki lebar yang sama */
+}
+
+.amount-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.currency-prefix {
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.transaction-form-container {
+  margin-top: 20px;
+}
+
+.transaction-form-group {
+  margin-bottom: 15px;
+}
