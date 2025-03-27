@@ -637,7 +637,7 @@ td {
 
 .transaction-form-input,
 .transaction-form-select {
-  width: 90%;
+  width: auto;
   padding: 12px 15px;
   border: 2px solid var(--input-border);
   border-radius: var(--border-radius);
@@ -728,6 +728,7 @@ td {
 .amount-input {
   padding-left: 40px !important; /* Ruang untuk prefix Rp */
   letter-spacing: 0.5px;
+  width: 90%;
 }
 
 /* Perbaikan responsif */
@@ -749,5 +750,208 @@ td {
   
   .amount-input {
       padding-left: 35px !important;
+  }
+}
+/* Styling untuk container jenis pembayaran */
+#paymentTypesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Jarak antar item */
+  margin-bottom: 20px;
+}
+
+/* Styling untuk setiap item jenis pembayaran */
+.payment-type-item {
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 10px; /* Jarak antar elemen dalam item */
+  padding: 10px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.payment-type-item:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Efek hover */
+}
+
+/* Styling untuk select input */
+.payment-type-item select {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: var(--transition);
+}
+.payment-type-item select option {
+  background-color: #172e69; /* Warna biru gelap (sesuai --primary-color) */
+  color: white; /* Warna teks putih */
+}
+
+.payment-type-item select:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  
+}
+
+/* Styling untuk input jumlah */
+.payment-type-item input[type="number"] {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  text-align: right;
+  transition: var(--transition);
+}
+
+.payment-type-item input[type="number"]:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Styling untuk tombol hapus item */
+.remove-payment-btn {
+  background-color: var(--error-color);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.remove-payment-btn:hover {
+  background-color: #b82f25cc; /* Efek hover lebih redup */
+}
+
+.remove-payment-btn i {
+  color: white;
+  font-size: 14px;
+}
+
+/* Styling untuk tombol "Tambah Jenis Pembayaran" */
+.add-payment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow);
+}
+
+.add-payment-btn:hover {
+  background-color: #e15f0ecc; /* Efek hover lebih redup */
+}
+
+.add-payment-btn i {
+  font-size: 16px;
+}
+/* Responsive Design */
+
+/* Tablet */
+@media (max-width: 992px) {
+  .dashboard-container {
+      max-width: 800px; /* Lebar maksimal untuk tablet */
+      padding: 15px;
+  }
+
+  .transaction-form-container {
+      padding: 15px;
+  }
+
+  .transaction-form-title {
+      font-size: 1.5rem;
+  }
+
+  .add-payment-btn {
+      font-size: 12px;
+      padding: 8px 12px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .dashboard-container {
+      max-width: 100%; /* Full width untuk mobile */
+      padding: 10px;
+  }
+
+  .transaction-form-container {
+      padding: 10px;
+  }
+
+  .transaction-form-title {
+      font-size: 1.2rem;
+  }
+
+  .transaction-form-group {
+      margin-bottom: 10px;
+  }
+
+  .payment-type-item {
+      flex-direction: column; /* Tumpuk elemen secara vertikal */
+      gap: 5px;
+  }
+
+  .payment-type-item select,
+  .payment-type-item input[type="number"] {
+      width: 100%; /* Input dan select menjadi full width */
+  }
+
+  .add-payment-btn {
+      font-size: 12px;
+      padding: 8px 12px;
+      width: 100%; /* Tombol menjadi full width */
+  }
+}
+
+/* Extra Small Devices (Ponsel kecil) */
+@media (max-width: 480px) {
+  body {
+      font-size: 14px; /* Ukuran font lebih kecil */
+  }
+
+  .curve h1 {
+      font-size: 1.5rem;
+  }
+
+  .curve h2 {
+      font-size: 1rem;
+  }
+
+  .transaction-form-title {
+      font-size: 1rem;
+  }
+
+  .transaction-form-group label {
+      font-size: 12px;
+  }
+
+  .transaction-form-input,
+  .transaction-form-select {
+      font-size: 12px;
+      padding: 6px;
+  }
+
+  .add-payment-btn {
+      font-size: 10px;
+      padding: 6px 10px;
   }
 }

@@ -18,20 +18,34 @@
             <h1 class="transaction-form-title"><i class="fas fa-file-invoice-dollar"></i> Form Transaksi Baru</h1>
             
             <form id="transactionForm" class="transaction-form">
+                <!-- Tanggal Transaksi -->
                 <div class="transaction-form-group">
-                    <label for="studentId" class="transaction-form-label">
-                        <i class="fas fa-id-card"></i> ID Siswa
+                    <label for="transactionDate" class="transaction-form-label">
+                        <i class="fas fa-calendar-alt"></i> Tanggal Transaksi
                     </label>
-                    <input type="text" id="studentId" class="transaction-form-input" required placeholder="SIS-001" maxlength="10">
+                    <input type="date" id="transactionDate" class="transaction-form-input" required>
                 </div>
-    
+
+                <!-- Nama Siswa (Autocomplete) -->
                 <div class="transaction-form-group">
                     <label for="studentName" class="transaction-form-label">
                         <i class="fas fa-user-graduate"></i> Nama Siswa
                     </label>
-                    <input type="text" id="studentName" class="transaction-form-input" required maxlength="50">
+                    <input type="text" id="studentName" class="transaction-form-input" list="studentList" required maxlength="50">
+                    <datalist id="studentList">
+                        <!-- Daftar nama siswa akan diisi secara dinamis -->
+                    </datalist>
                 </div>
-    
+
+                <!-- ID Siswa (Otomatis Terisi) -->
+                <div class="transaction-form-group">
+                    <label for="studentId" class="transaction-form-label">
+                        <i class="fas fa-id-card"></i> ID Siswa
+                    </label>
+                    <input type="text" id="studentId" class="transaction-form-input" readonly>
+                </div>
+
+                <!-- Jumlah (Rp) -->
                 <div class="transaction-form-group">
                     <label for="amount" class="transaction-form-label">
                         <i class="fas fa-money-bill-wave"></i> Jumlah (Rp)
@@ -42,19 +56,21 @@
                                placeholder="0" inputmode="numeric">
                     </div>
                 </div>
-    
+
+                <!-- Jenis Pembayaran -->
                 <div class="transaction-form-group">
-                    <label for="paymentMethod" class="transaction-form-label">
-                        <i class="fas fa-credit-card"></i> Metode Pembayaran
+                    <label for="paymentTypesContainer" class="transaction-form-label">
+                        <i class="fas fa-receipt"></i> Jenis Pembayaran
                     </label>
-                    <select id="paymentMethod" class="transaction-form-select" required>
-                        <option value="">Pilih metode...</option>
-                        <option value="Transfer Bank">Transfer Bank</option>
-                        <option value="QRIS">QRIS</option>
-                        <option value="Tunai">Tunai</option>
-                    </select>
+                    <div id="paymentTypesContainer">
+                        <!-- Jenis pembayaran akan ditambahkan dinamis -->
+                    </div>
+                    <button type="button" id="addPaymentType" class="add-payment-btn">
+                        <i class="fas fa-plus"></i> Tambah Jenis Pembayaran
+                    </button>
                 </div>
-    
+
+                <!-- Tombol Simpan -->
                 <button type="submit" class="transaction-form-button">
                     <i class="fas fa-save"></i> Simpan Transaksi
                 </button>
@@ -66,54 +82,105 @@
     </footer>
 
     <script>
-        document.getElementById('transactionForm').addEventListener('submit', async (e) => {
+        // Data dummy untuk daftar siswa
+        const studentData = [
+            { id: "SIS-001", name: "Ahmad", parentId: "PARENT-001" },
+            { id: "SIS-002", name: "Budi", parentId: "PARENT-001" },
+            { id: "SIS-003", name: "Citra", parentId: "PARENT-002" }
+        ];
+
+        // Inisialisasi daftar nama siswa
+        const studentList = document.getElementById('studentList');
+        studentData.forEach(student => {
+            const option = document.createElement('option');
+            option.value = student.name;
+            option.setAttribute('data-id', student.id);
+            studentList.appendChild(option);
+        });
+
+        // Isi ID Siswa otomatis saat nama dipilih
+        document.getElementById('studentName').addEventListener('input', function () {
+            const selectedOption = Array.from(studentList.options).find(option => option.value === this.value);
+            if (selectedOption) {
+                document.getElementById('studentId').value = selectedOption.getAttribute('data-id');
+            }
+        });
+
+        // Format Rupiah Otomatis
+        document.getElementById('amount').addEventListener('input', function () {
+            let value = this.value.replace(/[^\d]/g, '');
+            value = value.replace(/^0+/, '') || '0';
+            const formatted = new Intl.NumberFormat('id-ID').format(value);
+            this.value = formatted;
+        });
+
+        // Konversi ke angka sebelum submit
+        document.getElementById('transactionForm').addEventListener('submit', function () {
+            const amountInput = document.getElementById('amount');
+            const numericValue = amountInput.value.replace(/\./g, '');
+            amountInput.value = numericValue;
+        });
+
+        // Tambah Jenis Pembayaran
+        document.getElementById('addPaymentType').addEventListener('click', function () {
+            const container = document.getElementById('paymentTypesContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'payment-type-item';
+            newItem.innerHTML = `
+                <select name="paymentType" required>
+                    <option value="">Pilih jenis...</option>
+                    <option value="SPP">SPP</option>
+                    <option value="Uang Bangunan">Uang Bangunan</option>
+                </select>
+                <input type="number" name="paymentAmount" placeholder="Jumlah (Rp)" required>
+                <button type="button" class="remove-payment-btn" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(newItem);
+        });
+
+        // Kirim Data ke Google Spreadsheet
+        document.getElementById('transactionForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            // Kumpulkan data formulir
+            const paymentDetails = Array.from(document.querySelectorAll('.payment-type-item')).map(item => ({
+                type: item.querySelector('select').value,
+                amount: item.querySelector('input').value
+            }));
+
             const data = {
+                transactionDate: document.getElementById('transactionDate').value,
                 studentId: document.getElementById('studentId').value,
                 studentName: document.getElementById('studentName').value,
                 amount: document.getElementById('amount').value,
-                paymentMethod: document.getElementById('paymentMethod').value,
-                timestamp: new Date().toISOString()
+                paymentDetails: paymentDetails
             };
 
             try {
                 const response = await fetch(
-                    'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', 
+                    'https://script.google.com/macros/s/AKfycbz4Unnmz0lqoDQYO34so4diAo97V0irlhoYSgfDbr2QFwc4gb0XzCRJJ62gsFyy1i89/exec',
                     {
                         method: 'POST',
                         body: JSON.stringify(data)
                     }
                 );
-                
+
                 if (response.ok) {
-                    Swal.fire('Sukses!', 'Transaksi berhasil disimpan', 'success');
+                    alert('Transaksi berhasil disimpan!');
                     document.getElementById('transactionForm').reset();
+                } else {
+                    throw new Error('Gagal menyimpan transaksi');
                 }
             } catch (error) {
-                Swal.fire('Error!', 'Gagal menyimpan transaksi', 'error');
+                alert('Error: ' + error.message);
+                console.error(error);
             }
         });
-        
-        // Format Rupiah Otomatis
-        document.getElementById('amount').addEventListener('input', function(e) {
-            let value = this.value.replace(/[^\d]/g, '');
-            
-            // Hapus nol di depan
-            value = value.replace(/^0+/, '');
-            if (value === '') value = '0';
-            
-            // Format dengan titik
-            const formatted = new Intl.NumberFormat('id-ID').format(value);
-            this.value = formatted;
-        });
-        
-        // Konversi ke angka sebelum submit
-        document.getElementById('transactionForm').addEventListener('submit', function(e) {
-            const amountInput = document.getElementById('amount');
-            const numericValue = amountInput.value.replace(/\./g, '');
-            amountInput.value = numericValue; // Kirim angka tanpa titik
-        });
-        </script>
+
+        // Isi tanggal default hari ini
+        document.getElementById('transactionDate').valueAsDate = new Date();
+    </script>
 </body>
 </html>
