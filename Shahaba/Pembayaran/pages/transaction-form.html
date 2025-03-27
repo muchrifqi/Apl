@@ -17,13 +17,6 @@
         <div class="transaction-form-container">
             <h1 class="transaction-form-title"><i class="fas fa-file-invoice-dollar"></i> Form Transaksi Baru</h1>
             <form id="transactionForm" class="transaction-form">
-                <!-- Tanggal Pembayaran (Manual Input) -->
-                <div class="transaction-form-group">
-                    <label for="paymentDate" class="transaction-form-label">
-                        <i class="fas fa-calendar-alt"></i> Tanggal Pembayaran
-                    </label>
-                    <input type="date" id="paymentDate" class="transaction-form-input" required>
-                </div>
 
                 <!-- Tanggal Bukti Pembayaran (Otomatis, Tersembunyi) -->
                 <input type="hidden" id="proofDate" name="proofDate">
@@ -47,17 +40,6 @@
                     </div>
                     <datalist id="studentList">
                         <!-- Daftar nama siswa akan diisi secara dinamis -->
-                    </datalist>
-                </div>
-
-                <!-- Nama Saudara (Opsional) -->
-                <div class="transaction-form-group">
-                    <label for="siblingName" class="transaction-form-label">
-                        <i class="fas fa-users"></i> Nama Saudara (Opsional)
-                    </label>
-                    <input type="text" id="siblingName" class="transaction-form-input" list="siblingList" placeholder="Nama Saudara">
-                    <datalist id="siblingList">
-                        <!-- Daftar nama saudara akan diisi secara dinamis -->
                     </datalist>
                 </div>
 
@@ -193,7 +175,7 @@
             });
 
             // Validasi: Pastikan semua input terisi
-            if (!document.getElementById('paymentDate').value ||
+            if (
                 !document.getElementById('transactionDate').value ||
                 !document.getElementById('studentId').value ||
                 !document.getElementById('studentInfo').value ||
