@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>EID-1447H :: Data Pipeline Monitoring</title>
+    <title>EID-1447H :: Cryptographic Greeting Protocol</title>
     <style>
         :root {
             --hacker-green: #00ff88;
@@ -31,27 +31,34 @@
             overflow: hidden;
         }
 
-        .eid-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(0, 255, 136, 0.1),
-                transparent
-            );
-            animation: scanline 3s infinite;
-        }
-
         .arabic-terminal {
             font-size: 2.5rem;
             text-align: center;
             text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
             margin: 2rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            padding: 1rem 0;
+        }
+
+        .marquee {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: #00ff88;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         .data-grid {
@@ -81,56 +88,52 @@
             margin: 1rem 0;
             position: relative;
         }
-
-        @keyframes scanline {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
-        .ascii-art {
-            white-space: pre;
-            color: #00ff88;
-            text-align: center;
-            margin: 2rem 0;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="eid-header">
-            <div class="ascii-art">
-                ████████╗ █████╗  ██████╗ █████╗ ██████╗  █████╗ ██╗  ██╗
-                ╚══██╔══╝██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔══██╗██║  ██║
-                   ██║   ███████║██║     ███████║██████╔╝███████║███████║
-                   ██║   ██╔══██║██║     ██╔══██║██╔══██╗██╔══██║██╔══██║
-                   ██║   ██║  ██║╚██████╗██║  ██║██████╔╝██║  ██║██║  ██║
-                   ╚═╝   ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-            </div>
-            
             <div class="arabic-terminal">تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ</div>
             
+            <div class="marquee-container">
+                <div class="marquee">
+<pre>
+▓█████▄  ▄▄▄       ██▀███   ██▓ ██▓     ██▓    ▓█████ ▄▄▄       ███▄ ▄███▓▓█████ 
+▒██▀ ██▌▒████▄    ▓██ ▒ ██▒▓██▒▓██▒    ▓██▒    ▒██▀ ██▌▒████▄   ▓██▒▀█▀ ██▒▓█   ▀ 
+░██   █▌▒██  ▀█▄  ▓██ ░▄█ ▒▒██▒▒██░    ▒██░    ░██   █▌▒██  ▀█▄ ▓██    ▓██░▒███   
+░▓█▄   ▌░██▄▄▄▄██ ▒██▀▀█▄  ░██░▒██░    ▒██░    ░▓█▄   ▌░██▄▄▄▄██▒██    ▒██ ▒▓█  ▄ 
+░▒████▓  ▓█   ▓██▒░██▓ ▒██▒░██░░██████▒░██████▒░▒████▓  ▓█   ▓██▒██▒   ░██▒░▒████▒
+ ▒▒▓  ▒  ▒▒   ▓▒█░░ ▒▓ ░▒▓░░▓  ░ ▒░▓  ░░ ▒░▓  ░ ▒▒▓  ▒  ▒▒   ▓▒█░ ▒░   ░  ░░░ ▒░ ░
+ ░ ▒  ▒   ▒   ▒▒ ░  ░▒ ░ ▒░ ▒ ░░ ░ ▒  ░░ ░ ▒  ░ ░ ▒  ▒   ▒   ▒▒ ░░  ░      ░ ░ ░  ░
+ ░ ░  ░   ░   ▒     ░░   ░  ▒ ░  ░ ░     ░ ░    ░ ░  ░   ░   ▒   ░      ░      ░   
+   ░          ░  ░   ░      ░      ░  ░    ░  ░   ░          ░  ░       ░      ░  ░
+ ░                                                         ░                      
+</pre>
+                </div>
+            </div>
+
             <div class="system-panel">
-                <h3>🌙 EID-1447H Data Pipeline</h3>
-                <div>Status: <span style="color: #00ff88;">PRODUCTION</span></div>
-                <div>Throughput: 1.4M req/sec</div>
-                <div>Latency: 42ms p95</div>
+                <h3>🔒 SHA-256 Eid Protocol v1.4.4</h3>
+                <div>Network: Global Iman Blockchain</div>
+                <div>Consensus: Proof-of-Taqwa</div>
+                <div>Nodes: 1447 Active Miners</div>
             </div>
         </div>
 
         <div class="data-grid">
             <div class="system-panel">
-                <h4>🕋 Ibadah Metrics</h4>
+                <h4>🕋 Prayer Metrics</h4>
                 <div class="sparkline" id="prayer-metrics"></div>
-                <div>Total Takbir: 2.4M</div>
-                <div>Shalat Success Rate: 99.99%</div>
+                <div>Requests: 1.4M/min</div>
+                <div>Success Rate: 99.99%</div>
             </div>
 
             <div class="system-panel">
-                <h4>📈 Charity Distribution</h4>
+                <h4>📦 Zakat Distribution</h4>
                 <div class="sparkline" id="charity-flow"></div>
-                <div>Zakat Processed: 8,452</div>
-                <div>Nodes: 14 Edge Locations</div>
+                <div>Transactions: 8,452</div>
+                <div>Throughput: 142 TPS</div>
             </div>
         </div>
 
@@ -138,7 +141,7 @@
     </div>
 
     <script>
-        // Matrix background effect
+        // Matrix background
         const chars = '01';
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -171,11 +174,11 @@
 
         // Log generator
         const logs = [
-            "[SYSTEM] Takbir distribution cluster scaled to 12 nodes",
+            "[SYSTEM] Takbir cluster scaled to 16 nodes",
             "[AUDIT] Zakat transaction 0x8a3f...dac2 verified",
-            "[METRICS] 1.2M concurrent Eid greetings processed",
-            "[SECURITY] All GRPC connections encrypted with TLS 1.3",
-            "[OPTIMIZATION] Dua response time improved by 42%"
+            "[NETWORK] 1.4M concurrent Eid greetings processed",
+            "[SECURITY] GRPC connections encrypted with TLS 1.3",
+            "[OPTIMIZATION] Cache hit ratio improved to 98.7%"
         ];
 
         setInterval(() => {
