@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Backend System - Taqabbalallahu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #0a0a0a;
+            color: #c7ffc7;
+            font-family: 'Courier New', monospace;
+        }
+
+        .server-rack {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #0a0a0a,
+                #0a0a0a 10px,
+                #1a1a1a 10px,
+                #1a1a1a 20px
+            );
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0,255,0,0.5);
+        }
+
+        .server-log {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid rgba(0,255,0,0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .log-stream {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .server-status {
+            display: flex;
+            justify-content: space-around;
+            margin: 2rem 0;
+        }
+
+        .status-box {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            flex: 1;
+            margin: 0 1rem;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 2;
+            margin-top: 4rem;
+            padding: 1rem;
+        }
+
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="server-rack"></div>
+    <div class="container">
+        <h1>تقبل الله منا ومنكم</h1>
+        <h2 style="color: #00ff00; letter-spacing: 2px;">Taqabbalallahu minna wa minkum</h2>
+        
+        <div class="server-status">
+            <div class="status-box">
+                <h3>Node.js Cluster</h3>
+                <pre id="cluster-status">[PM2] Cluster mode enabled
+├─ Process 0: online, memory: 1.2GB
+├─ Process 1: online, memory: 1.1GB
+└─ Process 2: online, memory: 1.3GB</pre>
+            </div>
+            <div class="status-box">
+                <h3>Database Status</h3>
+                <pre id="db-status">PostgreSQL 14.2
+Uptime: 18d 4h 22m
+Connections: 487/500
+QPS: 12,456</pre>
+            </div>
+        </div>
+
+        <div class="server-log">
+            <div class="log-stream" id="log-stream"></div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Ramadhan 1446 H</p>
+        </div>
+    </div>
+
+    <script>
+        // Matrix background
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'SERVER_STARTING...HTTP/1.1 200 OK\nCONTENT-TYPE: APPLICATION/JSON\n\n{"status":"healthy"}\nWARNING: LOW_DISK_SPACE\n[CRONJOB] Backup completed\nERROR: CONNECTION_TIMEOUT\n502 BAD_GATEWAY\n200 SUCCESS\n404 NOT_FOUND\n500 INTERNAL_SERVER_ERROR\nDEBUG: Memory usage 78%\n';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for(let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Log stream simulation
+        const logMessages = [
+            "[INFO] Database connection established",
+            "[WARN] High latency detected in us-east-1",
+            "[DEBUG] Cache invalidated for user:12345",
+            "[ERROR] Redis connection timeout",
+            "[CRIT] CPU usage exceeded 95%",
+            "[NOTICE] Daily backup completed successfully",
+            "[ALERT] 5xx errors increased by 200%"
+        ];
+
+        function generateLog() {
+            const logStream = document.getElementById('log-stream');
+            const message = logMessages[Math.floor(Math.random() * logMessages.length)];
+            const timestamp = new Date().toISOString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.textContent = `${timestamp} ${message}`;
+            logEntry.style.color = message.includes('ERROR') ? '#ff0000' : 
+                                  message.includes('WARN') ? '#ffff00' : '#00ff00';
+            
+            logStream.appendChild(logEntry);
+            logStream.scrollTop = logStream.scrollHeight;
+            
+            if(logStream.childElementCount > 20) {
+                logStream.removeChild(logStream.firstChild);
+            }
+        }
+
+        setInterval(generateLog, 1000);
+
+        // Server status updates
+        function updateServerStatus() {
+            // Simulate cluster status update
+            document.getElementById('cluster-status').textContent = 
+                `PM2] Cluster mode enabled\n` +
+                `├─ Process 0: ${Math.random() > 0.9 ? 'restarting' : 'online'}, memory: ${Math.floor(Math.random()*1500+500)}MB\n` +
+                `├─ Process 1: online, memory: ${Math.floor(Math.random()*1500+500)}MB\n` +
+                `└─ Process 2: online, memory: ${Math.floor(Math.random()*1500+500)}MB`;
+
+            // Simulate database status
+            document.getElementById('db-status').textContent = 
+                `PostgreSQL 14.2\n` +
+                `Uptime: ${Math.floor(Math.random()*30)}d ${Math.floor(Math.random()*24)}h ${Math.floor(Math.random()*60)}m\n` +
+                `Connections: ${Math.floor(Math.random()*500)}/500\n` +
+                `QPS: ${Math.floor(Math.random()*20000)}`;
+        }
+
+        setInterval(updateServerStatus, 5000);
+        updateServerStatus();
+    </script>
+</body>
+</html>
