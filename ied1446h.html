@@ -2,241 +2,229 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>EID-1446H :: Quantum Greeting Interface</title>
+    <title>EID-1446H :: Quantum Taqabbalallahu Protocol</title>
     <style>
         :root {
             --hacker-green: #00ff88;
             --matrix-black: #0a0a0a;
+            --cyber-glow: 0 0 15px #00ff88;
         }
 
         body {
             margin: 0;
             background: var(--matrix-black);
             color: var(--hacker-green);
-            font-family: 'Source Code Pro', monospace;
+            font-family: 'Space Mono', monospace;
             overflow: hidden;
+            line-height: 1.6;
         }
 
-        .container {
+        .quantum-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 2rem;
-            position: relative;
-            z-index: 2;
         }
 
-        .eid-header {
-            border: 1px solid rgba(0, 255, 136, 0.1);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .arabic-terminal {
-            font-size: 2.5rem;
+        .hologram-header {
             text-align: center;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-            margin: 2rem 0;
+            padding: 3rem 0;
+            border-bottom: 2px solid rgba(0, 255, 136, 0.2);
+            margin-bottom: 3rem;
             position: relative;
-            z-index: 2;
-        }
-
-        .marquee-container {
             overflow: hidden;
-            white-space: nowrap;
-            margin: 2rem 0;
-            border: 1px solid rgba(0, 255, 136, 0.1);
-            padding: 1rem 0;
         }
 
-        .marquee {
-            display: inline-block;
-            animation: marquee 25s linear infinite;
-            font-size: 0.7rem;
-            line-height: 1.3;
-            color: #00ff88;
+        .arabic-hologram {
+            font-size: 4rem;
+            text-shadow: var(--cyber-glow);
+            animation: hologram 3s infinite alternate;
+            margin: 2rem 0;
+        }
+
+        .cyber-marquee {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1rem;
+            border: 1px solid var(--hacker-green);
+            margin: 2rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .marquee-text {
+            white-space: nowrap;
+            animation: marquee 20s linear infinite;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .quantum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .cyber-card {
+            background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
+            border: 1px solid rgba(0, 255, 136, 0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            animation: gridFlow 4s linear infinite;
+        }
+
+        .quantum-dashboard {
+            margin-top: 3rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .neon-log {
+            height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border: 1px solid var(--hacker-green);
+        }
+
+        @keyframes hologram {
+            0% { opacity: 0.8; filter: blur(1px); }
+            100% { opacity: 1; filter: blur(3px); }
         }
 
         @keyframes marquee {
             0% { transform: translateX(100%); }
-            100% { transform: translateX(-220%); }
+            100% { transform: translateX(-100%); }
         }
 
-        .data-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .system-panel {
-            border: 1px solid rgba(0, 255, 136, 0.1);
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        .log-stream {
-            height: 200px;
-            overflow-y: scroll;
-            border: 1px solid rgba(0, 255, 136, 0.1);
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .sparkline {
-            height: 100px;
-            background: rgba(0, 255, 136, 0.05);
-            margin: 1rem 0;
-            position: relative;
-        }
-
-        .glow {
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #00ff88; }
-            to { text-shadow: 0 0 20px #00ff88; }
+        @keyframes gridFlow {
+            0% { transform: rotate(0deg) translate(-50%, -50%); }
+            100% { transform: rotate(360deg) translate(-50%, -50%); }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="eid-header">
-            <div class="arabic-terminal glow">تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ</div>
+    <div class="quantum-container">
+        <div class="hologram-header">
+            <div class="arabic-hologram">تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ</div>
             
-            <div class="marquee-container">
-                <div class="marquee">
-<pre>
-█▀▀ █░█ ▀█▀ █▀▀ █░░ █▀▀ █░░ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀▀   █▀▄ █ █▀ ▀█▀ █▀█ █▀█ █▀▄   █▄█ █▀█ █░█ █▀▀ █▀█
-█▀░ █▄█ ░█░ ██▄ █▄▄ ██▄ █▄▄ ██▄ ░█░ █ █▄█ █░▀█ █▄▄   █▄▀ █ ▄█ ░█░ █▄█ █▄█ █▄▀   ░█░ █▄█ █▄█ ██▄ █▀▄
-▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓    ▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓ ▓▓▓▓▓▓
-▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒    ▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒ ▒▒▒▒▒▒
-░░░░ ░░░░ ░░░░      ░░░░░░  ░░░░░░░░ ░░░░ ░░░░ ░░░░ ░░░░ ░░░░ ░░░░░░ ░░░░░░
-▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓    ▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓ ▓▓▓▓▓▓
-▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒    ▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒ ▒▒▒▒▒▒
-1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6
-</pre>
+            <div class="cyber-marquee">
+                <div class="marquee-text">
+                    [ SYSTEM INITIALIZED ] ۞  EID-1446H  ۞  TAQABBALALLAHU MINNA WA MINKUM  ۞  QUANTUM BLESSING PROTOCOL  ۞  
                 </div>
             </div>
 
-            <div class="system-panel">
-                <h3>🛰️ Quantum Eid Network</h3>
-                <div>Protocol Version: 1446.1.0</div>
-                <div>Entanglement Nodes: 14.46M</div>
-                <div>Qubit Fidelity: 99.99%</div>
+            <div class="quantum-grid">
+                <div class="cyber-card">
+                    <h3>🜁 Quantum Zakat Network</h3>
+                    <div class="metric">⏱ Finality Time: 1.44μs</div>
+                    <div class="metric">🔗 Sharded Chains: 1446</div>
+                    <div class="metric">🔄 TPS: 1,446,000</div>
+                </div>
+
+                <div class="cyber-card">
+                    <h3>🜃 Prayer Analytics</h3>
+                    <div class="metric">📈 Throughput: 2.4M/s</div>
+                    <div class="metric">📉 Error Rate: 0.0001%</div>
+                    <div class="metric">⏳ Latency: 42ms p99</div>
+                </div>
             </div>
         </div>
 
-        <div class="data-grid">
-            <div class="system-panel">
-                <h4>📊 Prayer Analytics</h4>
-                <div class="sparkline" id="prayer-metrics"></div>
-                <div>Throughput: 1.4M/min</div>
-                <div>Error Rate: 0.001%</div>
+        <div class="quantum-dashboard">
+            <div class="neon-log" id="quantum-log">
+                <div class="log-entry">[2024-04-10T00:00:00Z] SYSTEM: Quantum blessing protocol initialized</div>
+                <div class="log-entry">[2024-04-10T00:00:01Z] BLOCKCHAIN: Zakat merkle root committed</div>
+                <div class="log-entry">[2024-04-10T00:00:02Z] AI: Takbir recognition model accuracy 99.999%</div>
             </div>
 
-            <div class="system-panel">
-                <h4>📦 Zakat Ledger</h4>
-                <div class="sparkline" id="charity-flow"></div>
-                <div>Transactions: 8,452</div>
-                <div>Finality Time: 2.6s</div>
+            <div class="cyber-card">
+                <h3>🜂 Cryptographic Integrity</h3>
+                <div class="metric">🔒 SHA-3-512: Verified</div>
+                <div class="metric">🔑 Zero-Knowledge Proof: Active</div>
+                <div class="metric">🛡️ Post-Quantum Crypto: Enabled</div>
             </div>
         </div>
-
-        <div class="log-stream" id="eid-logs"></div>
     </div>
 
     <script>
-        // Matrix rain background
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.style.position = 'fixed';
-        canvas.style.top = '0';
-        canvas.style.zIndex = '1';
-        document.body.prepend(canvas);
-
-        const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-        window.addEventListener('resize', resize);
-        resize();
-
-        const drawMatrix = () => {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff88';
-            ctx.font = '14px monospace';
-            
-            Array.from({length: Math.floor(canvas.width/14)}, (_, i) => {
-                const char = Math.random() > 0.5 ? '0' : '1';
-                ctx.fillText(char, i * 14, Math.random() * canvas.height);
-            });
-            
-            requestAnimationFrame(drawMatrix);
-        };
-        drawMatrix();
-
-        // Log generator
-        const logs = [
-            "[QUANTUM] Entanglement established with 14.46M nodes",
-            "[BLOCKCHAIN] Zakat block #1446 committed",
-            "[AI] Takbir pattern recognition accuracy: 99.98%",
-            "[SECURITY] Quantum encryption layer activated",
-            "[SYSTEM] Temporal greeting distribution initialized"
-        ];
-
-        setInterval(() => {
-            const logElement = document.getElementById('eid-logs');
-            const entry = document.createElement('div');
-            entry.textContent = `[${new Date().toISOString()}] ${logs[Math.floor(Math.random() * logs.length)]}`;
-            entry.style.color = Math.random() > 0.9 ? '#ff5555' : '#00ff88';
-            logElement.appendChild(entry);
-            logElement.scrollTop = logElement.scrollHeight;
-        }, 1800);
-
-        // Sparkline animation
-        function drawSparkline(id) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const container = document.getElementById(id);
-            container.innerHTML = '';
-            container.appendChild(canvas);
-            
-            canvas.width = container.offsetWidth;
-            canvas.height = container.offsetHeight;
-            
-            const data = Array.from({length: 50}, () => Math.random() * 100);
-            
-            function draw() {
-                ctx.fillStyle = '#000';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.beginPath();
-                ctx.strokeStyle = '#00ff88';
-                ctx.lineWidth = 1.5;
-                ctx.setLineDash([5, 3]);
-                
-                data.forEach((value, index) => {
-                    const x = (index / data.length) * canvas.width;
-                    const y = canvas.height - (value / 100 * canvas.height);
-                    
-                    if(index === 0) ctx.moveTo(x, y);
-                    else ctx.lineTo(x, y);
-                });
-                
-                ctx.stroke();
-                data.push(Math.random() * 100);
-                data.shift();
-                
-                requestAnimationFrame(draw);
+        // Quantum Matrix Effect
+        class QuantumMatrix {
+            constructor() {
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.style.position = 'fixed';
+                this.canvas.style.top = '0';
+                this.canvas.style.zIndex = '1';
+                document.body.prepend(this.canvas);
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+                this.animate();
             }
-            draw();
-        }
 
-        drawSparkline('prayer-metrics');
-        drawSparkline('charity-flow');
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            animate() {
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.ctx.fillStyle = '#00ff88';
+                this.ctx.font = '14px Space Mono';
+                
+                for(let i = 0; i < this.canvas.width/14; i++) {
+                    const char = String.fromCharCode(0x1400 + Math.random() * 0x100);
+                    this.ctx.fillText(char, i * 14, Math.random() * this.canvas.height);
+                }
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        new QuantumMatrix();
+
+        // Quantum Log System
+        class QuantumLog {
+            constructor() {
+                this.logElement = document.getElementById('quantum-log');
+                this.messages = [
+                    "[AI] Dua sentiment analysis completed: 100% positive",
+                    "[BLOCKCHAIN] New zakat block mined: 0x8a3f...dac2",
+                    "[SYSTEM] Quantum entanglement established with 1.4M nodes",
+                    "[SECURITY] Post-quantum signatures verified",
+                    "[OPTIMIZATION] Prayer routing improved by 46%"
+                ];
+                this.startStream();
+            }
+
+            startStream() {
+                setInterval(() => {
+                    const entry = document.createElement('div');
+                    entry.className = 'log-entry';
+                    entry.textContent = `[${new Date().toISOString()}] ${this.messages[Math.floor(Math.random() * this.messages.length)]}`;
+                    entry.style.textShadow = Math.random() > 0.95 ? '0 0 10px #ff5555' : '0 0 5px #00ff88';
+                    this.logElement.appendChild(entry);
+                    this.logElement.scrollTop = this.logElement.scrollHeight;
+                }, 1200);
+            }
+        }
+        new QuantumLog();
     </script>
 </body>
 </html>
