@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>EID-1447H :: Cryptographic Greeting Protocol</title>
+    <title>EID-1446H :: Quantum Greeting Interface</title>
     <style>
         :root {
             --hacker-green: #00ff88;
@@ -50,15 +50,15 @@
 
         .marquee {
             display: inline-block;
-            animation: marquee 20s linear infinite;
-            font-size: 0.8rem;
-            line-height: 1.4;
+            animation: marquee 25s linear infinite;
+            font-size: 0.7rem;
+            line-height: 1.3;
             color: #00ff88;
         }
 
         @keyframes marquee {
             0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            100% { transform: translateX(-220%); }
         }
 
         .data-grid {
@@ -88,52 +88,59 @@
             margin: 1rem 0;
             position: relative;
         }
+
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #00ff88; }
+            to { text-shadow: 0 0 20px #00ff88; }
+        }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet>
 </head>
 <body>
     <div class="container">
         <div class="eid-header">
-            <div class="arabic-terminal">تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ</div>
+            <div class="arabic-terminal glow">تَقَبَّلَ اللهُ مِنَّا وَمِنْكُمْ</div>
             
             <div class="marquee-container">
                 <div class="marquee">
 <pre>
-▓█████▄  ▄▄▄       ██▀███   ██▓ ██▓     ██▓    ▓█████ ▄▄▄       ███▄ ▄███▓▓█████ 
-▒██▀ ██▌▒████▄    ▓██ ▒ ██▒▓██▒▓██▒    ▓██▒    ▒██▀ ██▌▒████▄   ▓██▒▀█▀ ██▒▓█   ▀ 
-░██   █▌▒██  ▀█▄  ▓██ ░▄█ ▒▒██▒▒██░    ▒██░    ░██   █▌▒██  ▀█▄ ▓██    ▓██░▒███   
-░▓█▄   ▌░██▄▄▄▄██ ▒██▀▀█▄  ░██░▒██░    ▒██░    ░▓█▄   ▌░██▄▄▄▄██▒██    ▒██ ▒▓█  ▄ 
-░▒████▓  ▓█   ▓██▒░██▓ ▒██▒░██░░██████▒░██████▒░▒████▓  ▓█   ▓██▒██▒   ░██▒░▒████▒
- ▒▒▓  ▒  ▒▒   ▓▒█░░ ▒▓ ░▒▓░░▓  ░ ▒░▓  ░░ ▒░▓  ░ ▒▒▓  ▒  ▒▒   ▓▒█░ ▒░   ░  ░░░ ▒░ ░
- ░ ▒  ▒   ▒   ▒▒ ░  ░▒ ░ ▒░ ▒ ░░ ░ ▒  ░░ ░ ▒  ░ ░ ▒  ▒   ▒   ▒▒ ░░  ░      ░ ░ ░  ░
- ░ ░  ░   ░   ▒     ░░   ░  ▒ ░  ░ ░     ░ ░    ░ ░  ░   ░   ▒   ░      ░      ░   
-   ░          ░  ░   ░      ░      ░  ░    ░  ░   ░          ░  ░       ░      ░  ░
- ░                                                         ░                      
+█▀▀ █░█ ▀█▀ █▀▀ █░░ █▀▀ █░░ █▀▀ ▀█▀ █ █▀█ █▄░█ █▀▀   █▀▄ █ █▀ ▀█▀ █▀█ █▀█ █▀▄   █▄█ █▀█ █░█ █▀▀ █▀█
+█▀░ █▄█ ░█░ ██▄ █▄▄ ██▄ █▄▄ ██▄ ░█░ █ █▄█ █░▀█ █▄▄   █▄▀ █ ▄█ ░█░ █▄█ █▄█ █▄▀   ░█░ █▄█ █▄█ ██▄ █▀▄
+▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓    ▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓ ▓▓▓▓▓▓
+▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒    ▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒ ▒▒▒▒▒▒
+░░░░ ░░░░ ░░░░      ░░░░░░  ░░░░░░░░ ░░░░ ░░░░ ░░░░ ░░░░ ░░░░ ░░░░░░ ░░░░░░
+▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓    ▓▓▓▓▓▓  ▓▓▓▓▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓ ▓▓▓▓▓▓ ▓▓▓▓▓▓
+▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒    ▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒ ▒▒▒▒▒▒ ▒▒▒▒▒▒
+1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6   1 4 4 6
 </pre>
                 </div>
             </div>
 
             <div class="system-panel">
-                <h3>🔒 SHA-256 Eid Protocol v1.4.4</h3>
-                <div>Network: Global Iman Blockchain</div>
-                <div>Consensus: Proof-of-Taqwa</div>
-                <div>Nodes: 1447 Active Miners</div>
+                <h3>🛰️ Quantum Eid Network</h3>
+                <div>Protocol Version: 1446.1.0</div>
+                <div>Entanglement Nodes: 14.46M</div>
+                <div>Qubit Fidelity: 99.99%</div>
             </div>
         </div>
 
         <div class="data-grid">
             <div class="system-panel">
-                <h4>🕋 Prayer Metrics</h4>
+                <h4>📊 Prayer Analytics</h4>
                 <div class="sparkline" id="prayer-metrics"></div>
-                <div>Requests: 1.4M/min</div>
-                <div>Success Rate: 99.99%</div>
+                <div>Throughput: 1.4M/min</div>
+                <div>Error Rate: 0.001%</div>
             </div>
 
             <div class="system-panel">
-                <h4>📦 Zakat Distribution</h4>
+                <h4>📦 Zakat Ledger</h4>
                 <div class="sparkline" id="charity-flow"></div>
                 <div>Transactions: 8,452</div>
-                <div>Throughput: 142 TPS</div>
+                <div>Finality Time: 2.6s</div>
             </div>
         </div>
 
@@ -141,13 +148,12 @@
     </div>
 
     <script>
-        // Matrix background
-        const chars = '01';
+        // Matrix rain background
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.style.position = 'fixed';
-        canvas.style.top = 0;
-        canvas.style.zIndex = 1;
+        canvas.style.top = '0';
+        canvas.style.zIndex = '1';
         document.body.prepend(canvas);
 
         const resize = () => {
@@ -164,7 +170,7 @@
             ctx.font = '14px monospace';
             
             Array.from({length: Math.floor(canvas.width/14)}, (_, i) => {
-                const char = chars[Math.floor(Math.random() * chars.length)];
+                const char = Math.random() > 0.5 ? '0' : '1';
                 ctx.fillText(char, i * 14, Math.random() * canvas.height);
             });
             
@@ -174,21 +180,21 @@
 
         // Log generator
         const logs = [
-            "[SYSTEM] Takbir cluster scaled to 16 nodes",
-            "[AUDIT] Zakat transaction 0x8a3f...dac2 verified",
-            "[NETWORK] 1.4M concurrent Eid greetings processed",
-            "[SECURITY] GRPC connections encrypted with TLS 1.3",
-            "[OPTIMIZATION] Cache hit ratio improved to 98.7%"
+            "[QUANTUM] Entanglement established with 14.46M nodes",
+            "[BLOCKCHAIN] Zakat block #1446 committed",
+            "[AI] Takbir pattern recognition accuracy: 99.98%",
+            "[SECURITY] Quantum encryption layer activated",
+            "[SYSTEM] Temporal greeting distribution initialized"
         ];
 
         setInterval(() => {
             const logElement = document.getElementById('eid-logs');
             const entry = document.createElement('div');
             entry.textContent = `[${new Date().toISOString()}] ${logs[Math.floor(Math.random() * logs.length)]}`;
-            entry.style.color = Math.random() > 0.8 ? '#ff5555' : '#00ff88';
+            entry.style.color = Math.random() > 0.9 ? '#ff5555' : '#00ff88';
             logElement.appendChild(entry);
             logElement.scrollTop = logElement.scrollHeight;
-        }, 1500);
+        }, 1800);
 
         // Sparkline animation
         function drawSparkline(id) {
@@ -209,7 +215,8 @@
                 
                 ctx.beginPath();
                 ctx.strokeStyle = '#00ff88';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([5, 3]);
                 
                 data.forEach((value, index) => {
                     const x = (index / data.length) * canvas.width;
