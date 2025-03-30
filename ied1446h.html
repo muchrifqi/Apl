@@ -2,242 +2,210 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taqabbalallahu Backend v4.2.1</title>
+    <title>رمضان Gateway v5.2.0</title>
     <style>
         :root {
-            --primary: #00ff88;
-            --secondary: #0a1929;
-            --background: #0a0a12;
+            --primary: #2ecc71;
+            --secondary: #1a1f2d;
+            --accent: #27ae60;
         }
 
         body {
             margin: 0;
-            padding: 0;
-            background: var(--background);
+            background: var(--secondary);
             color: var(--primary);
-            font-family: 'IBM Plex Mono', monospace;
+            font-family: 'Fira Code', monospace;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        .architecture-overview {
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .surah-header {
+            text-align: center;
+            border-bottom: 2px solid rgba(46, 204, 113, 0.2);
+            padding-bottom: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .surah-header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            margin: 0;
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .surah-header h2 {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+        }
+
+        .system-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .service-card {
-            background: var(--secondary);
-            border: 1px solid rgba(0, 255, 136, 0.1);
+            background: #1d2433;
             border-radius: 8px;
             padding: 1.5rem;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(46, 204, 113, 0.1);
         }
 
         .service-card::before {
-            content: '';
+            content: '🕌';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0.05;
+            font-size: 8rem;
+            right: -1rem;
+            bottom: -2rem;
         }
 
-        .metrics-grid {
+        .metrics {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
-            margin: 1rem 0;
+            margin-top: 1rem;
         }
 
-        .metric-item {
+        .metric {
             padding: 1rem;
-            background: rgba(0, 255, 136, 0.05);
+            background: rgba(46, 204, 113, 0.05);
             border-radius: 4px;
             text-align: center;
         }
 
-        .terminal {
-            background: #000;
-            border: 2px solid var(--secondary);
+        .quran-verse {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: rgba(46, 204, 113, 0.05);
             border-radius: 8px;
-            padding: 1rem;
-            font-family: 'Source Code Pro', monospace;
-            height: 400px;
-            overflow-y: auto;
-        }
-
-        .log-entry {
-            padding: 0.25rem 0;
-            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
-        }
-
-        .kubernetes-cluster {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .node {
-            padding: 1rem;
-            background: var(--secondary);
-            border-radius: 4px;
             position: relative;
         }
 
-        .node-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
+        .quran-verse .arabic {
+            font-size: 2rem;
+            line-height: 1.5;
+            color: #2ecc71;
         }
 
-        .healthy { background: #00ff88; }
-        .warning { background: #ffd700; }
-        .critical { background: #ff0000; }
+        .quran-verse .translation {
+            margin-top: 1rem;
+            color: #7f8c8d;
+        }
 
-        .network-traffic {
+        .network-map {
             height: 200px;
-            background: var(--secondary);
+            background: #151a25;
             border-radius: 8px;
-            margin: 1rem 0;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>🛠️ Production Cluster - EU-CENTRAL-1</h1>
-        
-        <div class="metrics-grid">
-            <div class="metric-item">
-                <div>CPU Load</div>
-                <div class="metric-value" id="cpu-load">32.4%</div>
-            </div>
-            <div class="metric-item">
-                <div>Memory Usage</div>
-                <div class="metric-value" id="memory-usage">64.8%</div>
-            </div>
-            <div class="metric-item">
-                <div>Network In</div>
-                <div class="metric-value" id="network-in">1.2 Gbps</div>
-            </div>
-            <div class="metric-item">
-                <div>API Latency</div>
-                <div class="metric-value" id="api-latency">142ms</div>
-            </div>
+        <div class="surah-header">
+            <h1>تَقَبَّلَ اللَّهُ مِنَّا وَمِنْكُمْ</h1>
+            <h2>Ramadan API Gateway • v5.2.0 • Production Ready</h2>
         </div>
 
-        <div class="architecture-overview">
+        <div class="system-grid">
             <div class="service-card">
-                <h3>📦 Service: User API</h3>
-                <div>Version: 4.2.1</div>
-                <div>Replicas: 8/8 🟢</div>
-                <div>Requests: 12,456/sec</div>
-                <div>Errors: 0.12%</div>
+                <h3>🕋 Ibadah Service</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <div>Requests</div>
+                        <div>24k RPM</div>
+                    </div>
+                    <div class="metric">
+                        <div>Latency</div>
+                        <div>142ms</div>
+                    </div>
+                </div>
+                <div class="status">Cluster: 8 nodes 🟢</div>
             </div>
-            
+
             <div class="service-card">
-                <h3>🔍 Service: Search Indexer</h3>
-                <div>Version: 3.1.5</div>
-                <div>Shards: 32/32 🟠</div>
-                <div>Queue: 12,345</div>
-                <div>Lag: 45s</div>
+                <h3>📖 Quran CDN</h3>
+                <div class="metrics">
+                    <div class="metric">
+                        <div>Cache Hit</div>
+                        <div>98.7%</div>
+                    </div>
+                    <div class="metric">
+                        <div>Throughput</div>
+                        <div>1.4Gbps</div>
+                    </div>
+                </div>
+                <div class="status">Global Edge: 14 POPs 🌍</div>
             </div>
         </div>
 
-        <div class="kubernetes-cluster">
-            <div class="node">
-                <div class="node-status healthy"></div>
-                <h4>Node: worker-01</h4>
-                <div>CPU: 68%</div>
-                <div>Mem: 84%</div>
-                <div>Pods: 12/16</div>
-            </div>
-            <!-- Add more nodes -->
+        <div class="quran-verse">
+            <div class="arabic">رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ</div>
+            <div class="translation">[QS 2:127] "Our Lord, accept [this] from us. Indeed You are the Hearing, the Knowing."</div>
         </div>
 
-        <div class="terminal">
-            <div class="log-stream" id="log-stream">
-                <div class="log-entry">[INFO] 2024-03-20T14:22:35Z HorizontalPodAutoscaler adjusted replicas to 8</div>
-                <div class="log-entry">[DEBUG] 2024-03-20T14:22:37Z Redis cache hit ratio: 92.4%</div>
-                <div class="log-entry" style="color: #ffd700;">[WARN] 2024-03-20T14:22:40Z High memory pressure detected on worker-03</div>
-                <div class="log-entry" style="color: #ff0000;">[ERROR] 2024-03-20T14:22:42Z gRPC connection timeout to payment-service</div>
-            </div>
-        </div>
+        <div class="network-map" id="network-map"></div>
     </div>
 
     <script>
-        // Real-time metrics simulation
+        // Network node generator
+        const networkMap = document.getElementById('network-map');
+        for(let i = 0; i < 50; i++) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.style.left = `${Math.random() * 100}%`;
+            node.style.top = `${Math.random() * 100}%`;
+            node.style.animationDelay = `${Math.random() * 2}s`;
+            networkMap.appendChild(node);
+        }
+
+        // Live metrics update
         function updateMetrics() {
-            const metrics = {
-                cpu: Math.random() * 100,
-                memory: 60 + Math.random() * 30,
-                network: (2 + Math.random() * 3).toFixed(1),
-                latency: 80 + Math.random() * 100
-            };
-
-            document.getElementById('cpu-load').textContent = `${metrics.cpu.toFixed(1)}%`;
-            document.getElementById('memory-usage').textContent = `${metrics.memory.toFixed(1)}%`;
-            document.getElementById('network-in').textContent = `${metrics.network} Gbps`;
-            document.getElementById('api-latency').textContent = `${Math.round(metrics.latency)}ms`;
-        }
-
-        // Advanced log simulation
-        const logPatterns = {
-            info: [
-                'HorizontalPodAutoscaler adjusted replicas to',
-                'Deployment rolled out successfully',
-                'New connection established from'
-            ],
-            warn: [
-                'High memory pressure detected on',
-                'SSL certificate expiring in 7 days',
-                'API response time exceeding threshold'
-            ],
-            error: [
-                'gRPC connection timeout to',
-                'Database connection pool exhausted',
-                'Kafka consumer lag critical'
-            ]
-        };
-
-        function generateLogEntry() {
-            const levels = Object.keys(logPatterns);
-            const level = levels[Math.floor(Math.random() * levels.length)];
-            const message = logPatterns[level][Math.floor(Math.random() * logPatterns[level].length)];
-            
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.style.color = 
-                level === 'error' ? '#ff0000' :
-                level === 'warn' ? '#ffd700' : '#00ff88';
-            
-            entry.textContent = `[${level.toUpperCase()}] ${new Date().toISOString()} ${message}`;
-            
-            const logStream = document.getElementById('log-stream');
-            logStream.appendChild(entry);
-            logStream.scrollTop = logStream.scrollHeight;
-        }
-
-        // Service status simulation
-        function updateServiceStatus() {
-            document.querySelectorAll('.service-card').forEach(card => {
-                const replicas = Math.floor(6 + Math.random() * 4);
-                card.querySelector('div:nth-child(3)').textContent = 
-                    `Replicas: ${replicas}/${replicas} ${Math.random() > 0.9 ? '🟠' : '🟢'}`;
+            document.querySelectorAll('.metric div:last-child').forEach(metric => {
+                const currentValue = parseFloat(metric.textContent);
+                const fluctuation = currentValue * (Math.random() * 0.1 - 0.05);
+                metric.textContent = (currentValue + fluctuation).toLocaleString('en', {
+                    maximumFractionDigits: 1
+                });
             });
         }
 
-        setInterval(updateMetrics, 1000);
-        setInterval(generateLogEntry, 1500);
-        setInterval(updateServiceStatus, 5000);
+        setInterval(updateMetrics, 1500);
     </script>
 </body>
 </html>
